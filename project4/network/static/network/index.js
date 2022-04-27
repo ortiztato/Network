@@ -1,6 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-    //document.querySelector('#inbox').addEventListener('click', () => load_mailbox('inbox'));
+    document.querySelector('#allposts').addEventListener('click', () => {
+        document.querySelector('#newpostview').style.display = 'none';
+        loadposts();
+    })
+
     document.querySelector('#postform').onsubmit = () => {
         //alert("hola");
         fetch('/posts', {
