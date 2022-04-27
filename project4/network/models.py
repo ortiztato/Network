@@ -11,5 +11,10 @@ class Post (models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     likes = models.ManyToManyField(User, blank=True, null=True, related_name="rel_likes")
 
-    def __str__(self):
-        return f"{self.creator}: {self.body}"
+    def serialize(self):
+        return {
+            "id": self.id,
+            "creator": self.creator.username,
+            "body": self.body,
+            "timestamp": self.timestamp.strftime("%b %d %Y, %I:%M %p"),
+        }

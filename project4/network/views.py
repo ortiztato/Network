@@ -84,3 +84,9 @@ def createpost(request):
     post.save()
 
     return JsonResponse({"message": "Email sent successfully."}, status=201)
+
+def loadposts(request):
+    # Filter emails returned based on mailbox
+    posts = Post.objects.all()
+    posts = posts.order_by("-timestamp").all()
+    return JsonResponse([post.serialize() for post in posts], safe=False)

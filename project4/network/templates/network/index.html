@@ -2,16 +2,21 @@
 {% load static %}
 
 {% block body %}
-   <h2 id="AllPosts" style="margin: 10px;">All Posts</h2> 
-   {% if user.is_authenticated %}
-   <div id="newpost" style="border:1px solid rgb(230, 224, 224); margin: 10px; padding: 10px;align-self: center; width: 700px;">
-      <h3>New Post</h3>
-      <form id="postform">
-          <textarea class="form-control" style="margin: 10px" id="bodyform"></textarea>
-          <input type="submit" class="btn btn-primary" style="margin: 10px" value="Post"/>
-      </form>
-  </div>
-  {% endif %}
+    <div id="newpostview">
+       <h2 id="AllPosts" style="margin: 10px;">All Posts</h2> 
+        {% if user.is_authenticated %}
+        <div id="newpost" style="border:1px solid rgb(230, 224, 224); margin: 10px; padding: 10px;align-self: center; width: 700px;">
+        <h3>New Post</h3>
+        <form id="postform">
+           <textarea class="form-control" style="margin: 10px" id="bodyform"></textarea>
+           <input type="submit" class="btn btn-primary" style="margin: 10px" value="Post"/>
+        </form>
+        </div>
+        {% endif %}
+    </div>
+
+    <div id="postsview">
+    </div>
 {% endblock %}
 
 {% block script %}
