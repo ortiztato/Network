@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import JsonResponse
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import HttpResponse, HttpResponseRedirect, render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
@@ -69,5 +69,18 @@ def register(request):
 @csrf_exempt
 @login_required
 def createpost(request):
+    # Composing a new email must be via POST
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request required."}, status=400)
 
-        return JsonResponse({"good"}, status=400)
+    data = json.loads(request.body)
+    body = data.get("body", "")
+
+    # Create Post
+    post = Post(
+            creator=request.user,
+            body=body,
+        )
+    post.save()
+
+    return JsonResponse({"message": "Email sent successfully."}, status=201)
