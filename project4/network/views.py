@@ -2,13 +2,14 @@ import json
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
+from django.forms import NullBooleanField
 from django.http import JsonResponse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import HttpResponse, HttpResponseRedirect, render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import User, Post
+from .models import User, Post, Follow
 
 
 def index(request):
@@ -93,8 +94,12 @@ def loadposts(request):
 
 def loaduserposts(request, creator):
     # Filter emails returned based on mailbox
-    user = User.objects.get(username = creator)
-    posts = Post.objects.all().filter(creator = user)
+    usercreator = User.objects.get(username = creator)
+    if Follow.objects.all().filter(userfollower=request.user, userfollowed=usercreator).count() == 0:
+        followdata = False
+    else: 
+        followdata = True
+    posts = Post.objects.all().filter(creator = usercreator)
     posts = posts.order_by("-timestamp").all()
     posts = [post.serialize() for post in posts]
 
@@ -102,7 +107,26 @@ def loaduserposts(request, creator):
             "user": request.user.username,
             "followed": 20,
             "followers": 30,
+            "followdata": followdata,
             "posts": posts
     }
     #return JsonResponse([post.serialize() for post in posts], safe=False)
     return JsonResponse(data)
+
+@csrf_exempt
+def follow(request):
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        follower = data["follower"]
+        follower = User.objects.get(username = follower)
+        followed = data["followed"]
+        followed = User.objects.get(username = followed)
+        follow = Follow(userfollower=follower,userfollowed=followed)
+        follow.save()
+        return HttpResponse(status=204)
+
+    # Email must be via GET or PUT
+    else:
+        return JsonResponse({
+            "error": "PUT request required."
+        }, status=400)

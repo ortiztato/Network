@@ -96,23 +96,35 @@ function loaduser(creator) {
       console.log(data)
       const followed = data.followed;
       const followers = data.followers;
+      const userrequest = data.user;
+      const followdata = data.followdata;
       const userdata = document.createElement('div');
       userdata.innerHTML = `Followed: ${followed}<br/>Followers: ${followers}`;
       userdata.style.margin = "20px";
       document.querySelector('#userview').append(userdata);
+     
 
-      const userrequest = data.user;
-      //const username = document.createElement('div');
-      //username.innerHTML = `username: ${userrequest}`;
-      //document.querySelector('#userview').append(username);
-
-      
-
-      if (userrequest !== creator){
+      if (userrequest !== creator && userrequest){
         const follow = document.createElement('button');
-        follow.innerHTML = "Follow";
+        if (followdata){
+          follow.innerHTML = "Unfollow";
+        }
+        else {
+          follow.innerHTML = "Follow";
+        }
         follow.style.margin = "20px";
         document.querySelector('#userview').append(follow);
+
+        follow.addEventListener('click', () => {
+          fetch('/follow', {
+            method: 'PUT',
+            body: JSON.stringify({
+              follower: userrequest,
+              followed: creator
+            })
+          })
+          .then(() => loaduser(creator));
+        })
       }
     
       
