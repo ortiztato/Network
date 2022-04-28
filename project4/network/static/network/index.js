@@ -104,7 +104,7 @@ function loaduser(creator) {
       document.querySelector('#userview').append(userdata);
      
 
-      if (userrequest !== creator && userrequest){
+      if (userrequest !== creator && userrequest !== null){
         const follow = document.createElement('button');
         if (followdata){
           follow.innerHTML = "Unfollow";
@@ -120,7 +120,8 @@ function loaduser(creator) {
             method: 'PUT',
             body: JSON.stringify({
               follower: userrequest,
-              followed: creator
+              followed: creator,
+              followdata: followdata
             })
           })
           .then(() => loaduser(creator));

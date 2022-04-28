@@ -121,8 +121,12 @@ def follow(request):
         follower = User.objects.get(username = follower)
         followed = data["followed"]
         followed = User.objects.get(username = followed)
-        follow = Follow(userfollower=follower,userfollowed=followed)
-        follow.save()
+        followdata = data["followdata"]
+        if (followdata):
+            Follow.objects.get(userfollower=follower,userfollowed=followed).delete()
+        else:
+            follow = Follow(userfollower=follower,userfollowed=followed)
+            follow.save()   
         return HttpResponse(status=204)
 
     # Email must be via GET or PUT
