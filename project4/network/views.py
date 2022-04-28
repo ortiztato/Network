@@ -99,7 +99,7 @@ def loaduserposts(request, creator):
     posts = [post.serialize() for post in posts]
 
     data = {
-            "name": "Turro",
+            "user": request.user.username,
             "followed": 20,
             "followers": 30,
             "posts": posts

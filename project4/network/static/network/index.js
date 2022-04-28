@@ -88,6 +88,8 @@ function loaduser(creator) {
     title.style.margin = "20px";
     document.querySelector('#userview').append(title);
 
+    
+
     fetch(`/loaduserposts/${creator}`)
     .then(response => response.json())
     .then(data => {
@@ -98,6 +100,22 @@ function loaduser(creator) {
       userdata.innerHTML = `Followed: ${followed}<br/>Followers: ${followers}`;
       userdata.style.margin = "20px";
       document.querySelector('#userview').append(userdata);
+
+      const userrequest = data.user;
+      //const username = document.createElement('div');
+      //username.innerHTML = `username: ${userrequest}`;
+      //document.querySelector('#userview').append(username);
+
+      
+
+      if (userrequest !== creator){
+        const follow = document.createElement('button');
+        follow.innerHTML = "Follow";
+        follow.style.margin = "20px";
+        document.querySelector('#userview').append(follow);
+      }
+    
+      
 
       for (let post of data.posts) {
         const creator = post.creator;
@@ -117,10 +135,6 @@ function loaduser(creator) {
         
         divpost.append(postitem);
         document.querySelector('#userview').append(divpost);
-
-        postitem.addEventListener('click', () => 
-        //alert(`${creator}`));  
-        loaduser(`${creator}`));  
       }
 
         // Display message on the screen
