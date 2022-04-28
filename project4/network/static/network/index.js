@@ -75,7 +75,8 @@ function loadposts() {
     })
   }
 
-  function loaduser(creator) {
+function loaduser(creator) {
+    
     document.querySelector('#postsview').style.display = 'none';
     document.querySelector('#newpostview').style.display = 'none';
     document.querySelector('#userview').style.display = 'block';
@@ -87,7 +88,43 @@ function loadposts() {
     title.style.margin = "20px";
     document.querySelector('#userview').append(title);
 
+    fetch(`/loaduserposts/${creator}`)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data)
+      const followed = data.followed;
+      const followers = data.followers;
+      const userdata = document.createElement('div');
+      userdata.innerHTML = `Followed: ${followed}<br/>Followers: ${followers}`;
+      userdata.style.margin = "20px";
+      document.querySelector('#userview').append(userdata);
 
+      for (let post of data.posts) {
+        const creator = post.creator;
+        //const post_id = post.id;
+        const body = post.body;
+        const time = post.timestamp;
+        const likes = post.likes;
+        const divpost = document.createElement('div');
+        const postitem = document.createElement('div');
+        postitem.name = "itempost";
+        divpost.style.border = "1px solid rgb(230, 224, 224)"
+        //emailitem.style.borderRadius = "1%"
+        divpost.style.margin = "20px";
+        divpost.style.padding = "5px";
+        postitem.innerHTML = `${time}<br/>User: <strong>${creator}</strong> 
+        <br/>${body}<br/>Likes: ${likes}`;        
+        
+        divpost.append(postitem);
+        document.querySelector('#userview').append(divpost);
 
-  }
+        postitem.addEventListener('click', () => 
+        //alert(`${creator}`));  
+        loaduser(`${creator}`));  
+      }
+
+        // Display message on the screen
+        
+    })
+}
   

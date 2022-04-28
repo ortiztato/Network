@@ -90,3 +90,19 @@ def loadposts(request):
     posts = Post.objects.all()
     posts = posts.order_by("-timestamp").all()
     return JsonResponse([post.serialize() for post in posts], safe=False)
+
+def loaduserposts(request, creator):
+    # Filter emails returned based on mailbox
+    user = User.objects.get(username = creator)
+    posts = Post.objects.all().filter(creator = user)
+    posts = posts.order_by("-timestamp").all()
+    posts = [post.serialize() for post in posts]
+
+    data = {
+            "name": "Turro",
+            "followed": 20,
+            "followers": 30,
+            "posts": posts
+    }
+    #return JsonResponse([post.serialize() for post in posts], safe=False)
+    return JsonResponse(data)

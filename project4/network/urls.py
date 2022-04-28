@@ -9,5 +9,6 @@ urlpatterns = [
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
     path("posts", views.createpost, name="createpost"),
-    path("loadposts", views.loadposts, name="loadposts")
+    path("loadposts", views.loadposts, name="loadposts"),
+    path("loaduserposts/<str:creator>", views.loaduserposts, name="loaduserposts"),
 ]
