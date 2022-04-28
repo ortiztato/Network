@@ -2,7 +2,6 @@
 {% load static %}
 
 {% block body %}
-<h2 style="margin: 10px;">All Posts</h2> 
     <div id="newpostview">
         {% if user.is_authenticated %}
         <div id="newpost" style="border:1px solid rgb(230, 224, 224); margin: 10px; padding: 10px;align-self: center; width: 700px;">
@@ -17,6 +16,12 @@
 
     <div id="postsview">
     </div>
+
+    <div id="userview"> User View
+    </div>
+
+
+    
 {% endblock %}
 
 {% block script %}
