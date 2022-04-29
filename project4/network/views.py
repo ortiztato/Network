@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 import json
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -93,18 +94,24 @@ def loadposts(request):
     return JsonResponse([post.serialize() for post in posts], safe=False)
 
 def loaduserposts(request, creator):
-    # Filter emails returned based on mailbox
     usercreator = User.objects.get(username = creator)
-    if Follow.objects.all().filter(userfollower=request.user, userfollowed=usercreator).count() == 0:
-        followdata = False
+    if request.user.is_authenticated:
+        requestuser = request.user.username
+        if Follow.objects.all().filter(userfollower=request.user, userfollowed=usercreator).count() == 0:
+            followdata = False
+        else: 
+            followdata = True
     else: 
-        followdata = True
+        requestuser = "natalia"
+        followdata = False
+
     posts = Post.objects.all().filter(creator = usercreator)
     posts = posts.order_by("-timestamp").all()
     posts = [post.serialize() for post in posts]
+    
 
     data = {
-            "user": request.user.username,
+            "user": requestuser,
             "followed": 20,
             "followers": 30,
             "followdata": followdata,

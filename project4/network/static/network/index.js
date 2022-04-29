@@ -104,7 +104,7 @@ function loaduser(creator) {
       document.querySelector('#userview').append(userdata);
      
 
-      if (userrequest !== creator && userrequest !== null){
+      if (userrequest !== creator && userrequest !== "natalia"){
         const follow = document.createElement('button');
         if (followdata){
           follow.innerHTML = "Unfollow";
@@ -127,7 +127,6 @@ function loaduser(creator) {
           .then(() => loaduser(creator));
         })
       }
-    
       
 
       for (let post of data.posts) {
