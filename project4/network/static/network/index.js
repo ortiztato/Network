@@ -144,7 +144,8 @@ function loaduser(creator) {
 
       for (let post of data.posts) {
         const creator = post.creator;
-        //const post_id = post.id;
+        const idpost1 = post.id;
+        const idpost =`post${post.id}`;
         const body = post.body;
         const time = post.timestamp;
         const likes = post.likes;
@@ -155,11 +156,41 @@ function loaduser(creator) {
         //emailitem.style.borderRadius = "1%"
         divpost.style.margin = "20px";
         divpost.style.padding = "5px";
+        divpost.id = idpost;
         postitem.innerHTML = `${time}<br/>User: <strong>${creator}</strong> 
         <br/>${body}<br/>Likes: ${likes}`;        
         
         divpost.append(postitem);
-        document.querySelector('#userview').append(divpost);
+
+        if (document.querySelector('#nametitle').innerText === creator){
+          const editbutton = document.createElement('button');
+          editbutton.innerHTML = "Edit";
+          divpost.append(editbutton);
+          editbutton.addEventListener('click', () => {
+            document.querySelector(`#${idpost}`).innerHTML = 
+            `${time}<br/>
+            User: <strong>${creator}</strong><br/>
+            Likes: ${likes}<br/>
+            <form id="postform${idpost}">
+            <textarea class="form-control" style="margin: 5px" id="bodyform${idpost}">${body}</textarea>
+            <input type="submit" class="btn btn-primary" style="margin: 10px" value="Post"/>
+            </form>
+            `;
+            document.querySelector(`#postform${idpost}`).onsubmit = () => {
+              fetch('/editpost', {
+                method: 'PUT',
+                body: JSON.stringify({
+                    body: document.querySelector(`#bodyform${idpost}`).value,
+                    id: idpost1
+                })
+              })
+            .then(() => loaduser(creator));
+            }
+          })
+        }
+        
+      document.querySelector('#userview').append(divpost);
+
       }
 
         // Display message on the screen

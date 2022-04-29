@@ -148,3 +148,21 @@ def loadfollowing(request):
     posts = Post.objects.filter(creator__in=followed).order_by('-timestamp')
     posts = posts.order_by("-timestamp").all()
     return JsonResponse([post.serialize() for post in posts], safe=False)
+
+@csrf_exempt
+def editpost(request):
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        body = data["body"]
+        id = data["id"]
+        posttoedit = Post.objects.get(id=id)
+        posttoedit.body = body
+        posttoedit.save()
+        return HttpResponse(status=204)
+
+    # Email must be via GET or PUT
+    else:
+        return JsonResponse({
+            "error": "PUT request required."
+        }, status=400)
+
