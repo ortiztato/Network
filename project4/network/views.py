@@ -88,7 +88,6 @@ def createpost(request):
     return JsonResponse({"message": "Email sent successfully."}, status=201)
 
 def loadposts(request):
-    # Filter emails returned based on mailbox
     posts = Post.objects.all()
     posts = posts.order_by("-timestamp").all()
     return JsonResponse([post.serialize() for post in posts], safe=False)
@@ -143,3 +142,9 @@ def follow(request):
         return JsonResponse({
             "error": "PUT request required."
         }, status=400)
+
+def loadfollowing(request):
+    followed = Follow.objects.filter(userfollower=request.user).values('userfollowed_id')
+    posts = Post.objects.filter(creator__in=followed).order_by('-timestamp')
+    posts = posts.order_by("-timestamp").all()
+    return JsonResponse([post.serialize() for post in posts], safe=False)
