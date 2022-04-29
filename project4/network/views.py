@@ -95,6 +95,8 @@ def loadposts(request):
 
 def loaduserposts(request, creator):
     usercreator = User.objects.get(username = creator)
+    followed = Follow.objects.all().filter(userfollower=usercreator).count()
+    followers = Follow.objects.all().filter(userfollowed=usercreator).count()
     if request.user.is_authenticated:
         requestuser = request.user.username
         if Follow.objects.all().filter(userfollower=request.user, userfollowed=usercreator).count() == 0:
@@ -102,7 +104,7 @@ def loaduserposts(request, creator):
         else: 
             followdata = True
     else: 
-        requestuser = "natalia"
+        requestuser = NULL
         followdata = False
 
     posts = Post.objects.all().filter(creator = usercreator)
@@ -112,8 +114,8 @@ def loaduserposts(request, creator):
 
     data = {
             "user": requestuser,
-            "followed": 20,
-            "followers": 30,
+            "followed": followed,
+            "followers": followers,
             "followdata": followdata,
             "posts": posts
     }
