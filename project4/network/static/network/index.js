@@ -17,6 +17,13 @@ document.addEventListener('DOMContentLoaded', function() {
       loadfollowing();
   })
 
+    document.querySelector('#nametitle').addEventListener('click', () => {
+      document.querySelector('#newpostview').style.display = 'block';
+      nametitle = document.querySelector('#nametitle').innerText
+      //nametitle = "ortiztato"
+      loaduser(nametitle);
+})
+
     document.querySelector('#postform').onsubmit = () => {
         //alert("hola");
         fetch('/posts', {
