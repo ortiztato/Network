@@ -166,3 +166,19 @@ def editpost(request):
             "error": "PUT request required."
         }, status=400)
 
+@csrf_exempt
+def like(request):
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        post_id = data["post_id"]
+        posttoedit = Post.objects.get(id=post_id)
+        posttoedit.likes.add(request.user)
+
+        return HttpResponse(status=204)
+
+    # Email must be via GET or PUT
+    else:
+        return JsonResponse({
+            "error": "PUT request required."
+        }, status=400)
+
