@@ -20,6 +20,16 @@
     <div id="userview"> User View
     </div>
 
+    <div id="pagination">
+        <nav aria-label="Page navigation example" >
+            <ul class="pagination" >
+              <li class="page-item"><a class="page-link" id="previous">Previous</a></li>
+              <div id="pages"></div>
+              <li class="page-item"><a class="page-link" id="next">Next</a></li>
+            </ul>
+        </nav> 
+    </div>
+
 
     
 {% endblock %}
@@ -27,3 +37,5 @@
 {% block script %}
     <script src="{% static 'network/index.js' %}"></script>
 {% endblock %}
+
+

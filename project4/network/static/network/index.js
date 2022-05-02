@@ -1,14 +1,19 @@
+let counter = 0;
+const quantity = 10;
+
 document.addEventListener('DOMContentLoaded', function() {
 
     loadposts();
 
     document.querySelector('#allposts').addEventListener('click', () => {
         document.querySelector('#newpostview').style.display = 'none';
+        counter = 0;
         loadposts();
     })
 
     document.querySelector('#network').addEventListener('click', () => {
         document.querySelector('#newpostview').style.display = 'block';
+        counter = 0;
         loadposts();
     })
 
@@ -24,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
       loaduser(nametitle);
 })
 
+
     document.querySelector('#postform').onsubmit = () => {
         //alert("hola");
         fetch('/posts', {
@@ -34,12 +40,21 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => response.json())
         .then(() => {
+              counter = 0;
               loadposts();
               document.querySelector('#bodyform').value = "";
               //console.log(result);
         });
         return false;
     }
+})
+
+document.querySelector('#next').addEventListener('click', () => {
+  loadposts()
+})
+document.querySelector('#previous').addEventListener('click', () => {
+  counter = counter - quantity*2;
+  loadposts()
 })
 
 function loadposts() {
@@ -50,6 +65,10 @@ function loadposts() {
     //document.querySelector('#compose-view').style.display = 'none';
     //document.querySelector('#email-view').style.display = 'none';
     document.querySelector('#postsview').innerHTML = "";
+
+    const start = counter;
+    const end = start + quantity;
+    counter = end;
   
     // Show the mailbox name
     const title = document.createElement('h2');
@@ -57,11 +76,28 @@ function loadposts() {
     title.style.margin = "20px";
     document.querySelector('#postsview').append(title);
     
-    fetch('/loadposts')
+    fetch(`/loadposts?start=${start}&end=${end}`)
     .then(response => response.json())
-    .then(posts => {
-      console.log(posts)
-      for (let post of posts) {
+    .then(data => {
+      console.log(data)
+      totalposts = data.totalposts;
+      pages = Math.ceil(totalposts/quantity)
+      //document.querySelector('#postsview').innerHTML = `total pags: ${pages}`;
+      document.querySelector('#pages').style.display = 'block';
+      document.querySelector('#pages').innerHTML = '';
+      for (let i=1; i<pages+1; i++) {
+        elementpage = document.createElement('li');
+        elementpage.innerHTML = `<class="page-item"><a class="page-link" id="page${i}">${i}</a>`;
+        document.querySelector('#pages').append(elementpage);
+        document.querySelector(`#page${i}`).addEventListener('click', () => {
+          counter = (i*quantity) - 10;
+          loadposts()
+
+        })
+
+      }
+
+      for (let post of data.posts) {
         const creator = post.creator;
         const post_id = post.id;
         const body = post.body;
@@ -112,6 +148,7 @@ function loadposts() {
       }
       
     })
+    
   }
 
 function loaduser(creator) {

@@ -87,10 +87,24 @@ def createpost(request):
 
     return JsonResponse({"message": "Email sent successfully."}, status=201)
 
+@csrf_exempt
 def loadposts(request):
+    start = int(request.GET.get("start") or 0)
+    end = int(request.GET.get("end") or (start + 9))
+    if start<0:
+        start = 0
+        end = 10
     posts = Post.objects.all()
+    totalposts = Post.objects.all().count()
     posts = posts.order_by("-timestamp").all()
-    return JsonResponse([post.serialize() for post in posts], safe=False)
+    posts = posts[start:end]
+    posts = [post.serialize() for post in posts]
+    
+    data = {
+            "totalposts": totalposts,
+            "posts": posts
+    }
+    return JsonResponse(data)
 
 def loaduserposts(request, creator):
     usercreator = User.objects.get(username = creator)
