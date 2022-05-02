@@ -186,7 +186,9 @@ def like(request):
         data = json.loads(request.body)
         post_id = data["post_id"]
         posttoedit = Post.objects.get(id=post_id)
-        posttoedit.likes.add(request.user)
+        if posttoedit.likes.filter(username=request.user.username).count() == 0:
+            posttoedit.likes.add(request.user)
+        else: posttoedit.likes.remove(request.user)
 
         return HttpResponse(status=204)
 

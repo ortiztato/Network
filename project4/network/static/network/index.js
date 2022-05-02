@@ -133,7 +133,9 @@ function loadposts() {
                   post_id: post_id,
                 })
               })
-              .then(() => loadposts())
+              .then(() => {
+                counter=0;
+                loadposts()})
             )
             
           })
