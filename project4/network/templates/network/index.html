@@ -4,9 +4,9 @@
 {% block body %}
     <div id="newpostview">
         {% if user.is_authenticated %}
-        <div id="newpost" style="border:1px solid rgb(230, 224, 224); margin: 10px; padding: 10px;align-self: center; width: 700px;">
+        <div id="newpost" class="container border col-11 my-2">
         <h3>New Post</h3>
-        <form id="postform">
+        <form id="postform" >
            <textarea class="form-control" style="margin: 10px" id="bodyform"></textarea>
            <input type="submit" class="btn btn-primary" style="margin: 10px" value="Post"/>
         </form>
@@ -22,7 +22,7 @@
 
     <div id="pagination">
         <nav aria-label="Page navigation example" >
-            <ul class="pagination" >
+            <ul class="pagination">
               <li class="page-item"><a class="page-link" id="previous">Previous</a></li>
               <div id="pages"></div>
               <li class="page-item"><a class="page-link" id="next">Next</a></li>

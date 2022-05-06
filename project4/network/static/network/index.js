@@ -109,19 +109,30 @@ function loadposts() {
         divpost.style.border = "1px solid rgb(230, 224, 224)"
         //emailitem.style.borderRadius = "1%"
         divpost.style.margin = "20px";
-        divpost.style.padding = "5px";
-        postitem.innerHTML = `${time}<br/>User: <strong>${creator}</strong> 
-        <br/>${body}<br/>Likes: ${likes}`;        
+        divpost.style.padding = "5px";       
         
         const likebutton = document.createElement('button');
 
-        likebutton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-        <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+        likebutton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
         </svg>`;
 
+        likebutton.className = "col-1 ms-2 mb-2 btn btn-danger"
+        likebutton.style.color = "grey"; //red
         likebutton.style.borderColor = "white";
         likebutton.style.backgroundColor = "white";
-        likebutton.style.boxShadow = "none";
+
+        const likerow = document.createElement('div');
+        likerow.className = "row align-items-center"
+        const likenum = document.createElement('div');
+        likenum.innerHTML = `<h6>${likes}</h6>`;
+        likenum.className = "col-1"
+        likerow.append(likebutton);
+        likerow.append(likenum);
+
+
+        postitem.innerHTML = `<h5>@<strong>${creator}</strong> <small>${time}</small></h5> 
+        <p class="lead">${body}</p>`;  
 
         likebutton.addEventListener('click', () => {
           if (document.querySelector('#nametitle') === null){
@@ -141,10 +152,10 @@ function loadposts() {
           })
 
         divpost.append(postitem);
-        divpost.prepend(likebutton);
+        divpost.append(likerow);
         document.querySelector('#postsview').append(divpost);
 
-        postitem.addEventListener('click', () => 
+        divpost.addEventListener('click', () => 
         //alert(`${creator}`));  
         loaduser(`${creator}`));  
       }
@@ -222,37 +233,66 @@ function loaduser(creator) {
         divpost.style.margin = "20px";
         divpost.style.padding = "5px";
         divpost.id = idpost;
-        postitem.innerHTML = `${time}<br/>User: <strong>${creator}</strong> 
-        <br/>${body}<br/>Likes: ${likes}`;        
+        /* postitem.innerHTML = `${time}<br/>User: <strong>${creator}</strong> 
+        <br/>${body}<br/>Likes: ${likes}`;  */
+
+        postitem.innerHTML = `<h5>@<strong>${creator}</strong> <small>${time}</small></h5> 
+        <p class="lead">${body}</p>`; 
+        
+        const likebutton = document.createElement('button');
+
+        likebutton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+        </svg>`;
+
+        likebutton.className = "col-1 ms-2 mb-2 btn btn-danger"
+        likebutton.style.color = "grey"; //red
+        likebutton.style.borderColor = "white";
+        likebutton.style.backgroundColor = "white";
+
+        const likerow = document.createElement('div');
+        likerow.className = "row align-items-start"
+        const likenum = document.createElement('div');
+        likenum.innerHTML = `<h6>${likes}</h6>`;
+        likenum.className = "col-1 mt-2"
+        likerow.append(likebutton);
+        likerow.append(likenum);
+        
         
         divpost.append(postitem);
+        divpost.append(likerow);
 
-        if (document.querySelector('#nametitle').innerText === creator){
-          const editbutton = document.createElement('button');
-          editbutton.innerHTML = "Edit";
-          divpost.append(editbutton);
-          editbutton.addEventListener('click', () => {
-            document.querySelector(`#${idpost}`).innerHTML = 
-            `${time}<br/>
-            User: <strong>${creator}</strong><br/>
-            Likes: ${likes}<br/>
-            <form id="postform${idpost}">
-            <textarea class="form-control" style="margin: 5px" id="bodyform${idpost}">${body}</textarea>
-            <input type="submit" class="btn btn-primary" style="margin: 10px" value="Post"/>
-            </form>
-            `;
-            document.querySelector(`#postform${idpost}`).onsubmit = () => {
-              fetch('/editpost', {
-                method: 'PUT',
-                body: JSON.stringify({
-                    body: document.querySelector(`#bodyform${idpost}`).value,
-                    id: idpost1
+        if (document.querySelector('#nametitle') !== null){
+          if (document.querySelector('#nametitle').innerText === creator){
+            const editbutton = document.createElement('button');
+            editbutton.innerHTML = "Edit";
+            editbutton.className = "col-1 btn btn-outline-success btn-sm mt-1"
+            likerow.append(editbutton);
+            editbutton.addEventListener('click', () => {
+              document.querySelector(`#${idpost}`).innerHTML = 
+              `${time}<br/>
+              User: <strong>${creator}</strong><br/>
+              Likes: ${likes}<br/>
+              <form id="postform${idpost}">
+              <textarea class="form-control" style="margin: 5px" id="bodyform${idpost}">${body}</textarea>
+              <input type="submit" class="btn btn-primary" style="margin: 10px" value="Post"/>
+              </form>
+              `;
+              document.querySelector(`#postform${idpost}`).onsubmit = () => {
+                fetch('/editpost', {
+                  method: 'PUT',
+                  body: JSON.stringify({
+                      body: document.querySelector(`#bodyform${idpost}`).value,
+                      id: idpost1
+                  })
                 })
-              })
-            .then(() => loaduser(creator));
-            }
-          })
+              .then(() => loaduser(creator));
+              }
+            })
+          }
+
         }
+        
         
       document.querySelector('#userview').append(divpost);
 
