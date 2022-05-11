@@ -83,12 +83,11 @@ function loadposts() {
       totalposts = data.totalposts;
       pages = Math.ceil(totalposts/quantity)
       //document.querySelector('#postsview').innerHTML = `total pags: ${pages}`;
-      document.querySelector('#pages').style.display = 'block';
+      document.querySelector('#pages').style.display = 'inline-block';
       document.querySelector('#pages').innerHTML = '';
       for (let i=1; i<pages+1; i++) {
-        elementpage = document.createElement('li');
-        elementpage.innerHTML = `<class="page-item"><a class="page-link" id="page${i}">${i}</a>`;
-        document.querySelector('#pages').append(elementpage);
+        //document.querySelector('#pages').innerHTML += `<span class="col-1 text-center" id="page${i}">${i}</span>`
+        document.querySelector('#pages').innerHTML += `<button type="button" class="btn btn-primary btn-sm mx-1" id="page${i}">${i}</button>`
         document.querySelector(`#page${i}`).addEventListener('click', () => {
           counter = (i*quantity) - 10;
           loadposts()
