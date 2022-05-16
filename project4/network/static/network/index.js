@@ -292,6 +292,23 @@ function loaduser(creator) {
 
         }
         
+        likebutton.addEventListener('click', () => {
+          if (document.querySelector('#nametitle') === null){
+            alert("you need to log in to like!");}
+          else(
+              fetch('/like', {
+                method: 'PUT',
+                body: JSON.stringify({
+                  post_id: post_id,
+                })
+              })
+              .then(() => {
+                counter=0;
+                loadposts()})
+            )
+            
+          })
+        
         
       document.querySelector('#userview').append(divpost);
 
