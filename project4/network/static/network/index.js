@@ -60,6 +60,8 @@ document.querySelector('#previous').addEventListener('click', () => {
   loadposts()
 })
 
+// funcion principal que carga los posts
+
 function loadposts() {
 
     // carga las vistas
@@ -95,15 +97,24 @@ function loadposts() {
       document.querySelector('#pages').style.display = 'inline-block';
       document.querySelector('#pages').innerHTML = '';
       for (let i=1; i<pages+1; i++) {
-        //document.querySelector('#pages').innerHTML += `<span class="col-1 text-center" id="page${i}">${i}</span>`
+        const pagebutton = document.createElement('button');
+        pagebutton.innerHTML = `${i}`;
+        pagebutton.className = "btn btn-primary btn-sm mx-1";
+        pagebutton.addEventListener('click', () => {
+          counter = (i*quantity) - 10;
+          loadposts()
+        })
+        document.querySelector('#pages').append(pagebutton);
+
+
+        /* //document.querySelector('#pages').innerHTML += `<span class="col-1 text-center" id="page${i}">${i}</span>`
         document.querySelector('#pages').innerHTML += `<button type="button" class="btn btn-primary btn-sm mx-1" id="page${i}">${i}</button>`;
         
         document.querySelector(`#page${i}`).onclick = () => {
           counter = (i*quantity) - 10;
           loadposts()
 
-        }
-        
+        } */
         
         /* document.querySelector(`#page${i}`).addEventListener('click', () => {
           counter = (i*quantity) - 10;
@@ -290,7 +301,7 @@ function loaduser(creator) {
         postitem.innerHTML = `<h5>@<strong>${creator}</strong> <small>${time}</small></h5> 
         <p class="lead">${body}</p>`; 
 
-        //para revisar si el usuario ya likeo el post
+        // para revisar si el usuario ya likeo el post
 
         if (postliked.find(i => (i === post_id))) {
           var liked = true;
@@ -392,6 +403,8 @@ function loaduser(creator) {
     })
 }
 
+// funcion que carga los post de los users que follow
+
 function loadfollowing() {
     
   document.querySelector('#postsview').style.display = 'none';
@@ -420,7 +433,6 @@ function loadfollowing() {
         const postitem = document.createElement('div');
         postitem.name = "itempost";
         divpost.style.border = "1px solid rgb(230, 224, 224)"
-        //emailitem.style.borderRadius = "1%"
         divpost.style.margin = "20px";
         divpost.style.padding = "5px";
         postitem.innerHTML = `${time}<br/>User: <strong>${creator}</strong> 
