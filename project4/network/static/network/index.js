@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     loadposts();
 
+    // acciones del encabezado
+
     document.querySelector('#allposts').addEventListener('click', () => {
         document.querySelector('#newpostview').style.display = 'none';
         counter = 0;
@@ -25,13 +27,12 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('#nametitle').addEventListener('click', () => {
       document.querySelector('#newpostview').style.display = 'block';
       nametitle = document.querySelector('#nametitle').innerText
-      //nametitle = "ortiztato"
       loaduser(nametitle);
 })
 
+// accion del post from
 
     document.querySelector('#postform').onsubmit = () => {
-        //alert("hola");
         fetch('/posts', {
             method: 'POST',
             body: JSON.stringify({
@@ -49,6 +50,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 })
 
+// acciones de los botones del navigation
+
 document.querySelector('#next').addEventListener('click', () => {
   loadposts()
 })
@@ -58,41 +61,55 @@ document.querySelector('#previous').addEventListener('click', () => {
 })
 
 function loadposts() {
+
+    // carga las vistas
   
-    // Show the mailbox and hide other views
     document.querySelector('#postsview').style.display = 'block';
     document.querySelector('#userview').style.display = 'none';
-    //document.querySelector('#compose-view').style.display = 'none';
-    //document.querySelector('#email-view').style.display = 'none';
     document.querySelector('#postsview').innerHTML = "";
+
+    //counter para el pagination
 
     const start = counter;
     const end = start + quantity;
     counter = end;
+
+    // titulo
   
-    // Show the mailbox name
     const title = document.createElement('h2');
     title.innerHTML = "All Posts";
     title.style.margin = "20px";
     document.querySelector('#postsview').append(title);
-    
+
+    // busca la data
+
     fetch(`/loadposts?start=${start}&end=${end}`)
     .then(response => response.json())
     .then(data => {
       console.log(data)
+
+      // pagination 
+
       totalposts = data.totalposts;
       pages = Math.ceil(totalposts/quantity)
-      //document.querySelector('#postsview').innerHTML = `total pags: ${pages}`;
       document.querySelector('#pages').style.display = 'inline-block';
       document.querySelector('#pages').innerHTML = '';
       for (let i=1; i<pages+1; i++) {
         //document.querySelector('#pages').innerHTML += `<span class="col-1 text-center" id="page${i}">${i}</span>`
-        document.querySelector('#pages').innerHTML += `<button type="button" class="btn btn-primary btn-sm mx-1" id="page${i}">${i}</button>`
-        document.querySelector(`#page${i}`).addEventListener('click', () => {
+        document.querySelector('#pages').innerHTML += `<button type="button" class="btn btn-primary btn-sm mx-1" id="page${i}">${i}</button>`;
+        
+        document.querySelector(`#page${i}`).onclick = () => {
           counter = (i*quantity) - 10;
           loadposts()
 
-        })
+        }
+        
+        
+        /* document.querySelector(`#page${i}`).addEventListener('click', () => {
+          counter = (i*quantity) - 10;
+          loadposts()
+
+        }) */
 
       }
 
@@ -154,7 +171,7 @@ function loadposts() {
         // crea el contenido del post
 
         postitem.innerHTML = `<h5>@<strong>${creator}</strong> <small>${time}</small></h5> 
-        <p class="lead">${body}</p><p class="lead">liked:${postliked} ${liked}</p>`;  
+        <p class="lead">${body}</p>`;  
 
         // accion del boton like
 
@@ -183,7 +200,7 @@ function loadposts() {
 
         // accion del click post user
 
-        divpost.addEventListener('click', () =>   
+        postitem.addEventListener('click', () =>   
         loaduser(`${creator}`));  
       }
       
@@ -191,20 +208,26 @@ function loadposts() {
     
   }
 
+// funcion que carga los post de un user especifico
+
 function loaduser(creator) {
     
+  // carga las vistas
+
     document.querySelector('#postsview').style.display = 'none';
     document.querySelector('#newpostview').style.display = 'none';
     document.querySelector('#userview').style.display = 'block';
 
     document.querySelector('#userview').innerHTML = "";
 
+    // titulo
+
     const title = document.createElement('h2');
     title.innerHTML = `User: ${creator}`;
     title.style.margin = "20px";
     document.querySelector('#userview').append(title);
 
-    
+    // busca la data
 
     fetch(`/loaduserposts/${creator}`)
     .then(response => response.json())
@@ -219,6 +242,7 @@ function loaduser(creator) {
       userdata.style.margin = "20px";
       document.querySelector('#userview').append(userdata);
      
+      // boton de follow
 
       if (userrequest !== creator && userrequest !== 0){
         const follow = document.createElement('button');
@@ -244,6 +268,7 @@ function loaduser(creator) {
         })
       }
       
+      // carga los posts
 
       for (let post of data.posts) {
         const creator = post.creator;
@@ -300,9 +325,12 @@ function loaduser(creator) {
         likerow.append(likebutton);
         likerow.append(likenum);
         
-        
+        // apenda los elementos
+
         divpost.append(postitem);
         divpost.append(likerow);
+
+        // opcion de editar
 
         if (document.querySelector('#nametitle') !== null){
           if (document.querySelector('#nametitle').innerText === creator){
@@ -334,6 +362,8 @@ function loaduser(creator) {
           }
 
         }
+
+        // accion sobre el boton de like
 
         likebutton.addEventListener('click', () => {
           if (document.querySelector('#nametitle') === null){
@@ -371,7 +401,7 @@ function loadfollowing() {
   document.querySelector('#userview').innerHTML = "";
 
   const title = document.createElement('h2');
-  title.innerHTML = 'Posts from followed users';
+  title.innerHTML = 'Users Following';
   title.style.margin = "20px";
   document.querySelector('#userview').append(title);
 
