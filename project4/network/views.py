@@ -100,9 +100,17 @@ def loadposts(request):
     posts = posts[start:end]
     posts = [post.serialize() for post in posts]
     
+    if request.user.is_authenticated:
+        requester = request.user
+        likedposts = requester.rel_likes.all()
+        likedposts = likedposts.values_list('id', flat=True)
+    else:
+        likedposts = [-1,-1]
+    
     data = {
             "totalposts": totalposts,
-            "posts": posts
+            "posts": posts,
+            "likedposts": list(likedposts)
     }
     return JsonResponse(data)
 
@@ -123,6 +131,13 @@ def loaduserposts(request, creator):
     posts = Post.objects.all().filter(creator = usercreator)
     posts = posts.order_by("-timestamp").all()
     posts = [post.serialize() for post in posts]
+
+    if request.user.is_authenticated:
+        requester = request.user
+        likedposts = requester.rel_likes.all()
+        likedposts = likedposts.values_list('id', flat=True)
+    else:
+        likedposts = [-1,-1]
     
 
     data = {
@@ -130,7 +145,8 @@ def loaduserposts(request, creator):
             "followed": followed,
             "followers": followers,
             "followdata": followdata,
-            "posts": posts
+            "posts": posts,
+            "likedposts": list(likedposts)
     }
     #return JsonResponse([post.serialize() for post in posts], safe=False)
     return JsonResponse(data)

@@ -97,19 +97,36 @@ function loadposts() {
       }
 
       for (let post of data.posts) {
+
         const creator = post.creator;
         const post_id = post.id;
         const body = post.body;
         const time = post.timestamp;
         const likes = post.likes;
+        const postliked = data.likedposts;
+        
+        //para revisar si el usuario ya likeo el post
+
+        if (postliked.find(i => (i === post_id))) {
+          var liked = true;
+          }
+        else {
+          var liked = false;
+        }
+
+
+        // crea la base del post
+
         const divpost = document.createElement('div');
         const postitem = document.createElement('div');
         postitem.name = "itempost";
         divpost.style.border = "1px solid rgb(230, 224, 224)"
-        //emailitem.style.borderRadius = "1%"
         divpost.style.margin = "20px";
         divpost.style.padding = "5px";       
         
+
+        // boton de like
+
         const likebutton = document.createElement('button');
 
         likebutton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
@@ -117,9 +134,14 @@ function loadposts() {
         </svg>`;
 
         likebutton.className = "col-1 ms-2 mb-2 btn btn-danger"
-        likebutton.style.color = "grey"; //red
         likebutton.style.borderColor = "white";
         likebutton.style.backgroundColor = "white";
+        if (liked == true){
+          likebutton.style.color = "red";
+        }
+        else {likebutton.style.color = "grey";}
+        
+        // crea la fila para el like
 
         const likerow = document.createElement('div');
         likerow.className = "row align-items-center"
@@ -129,9 +151,12 @@ function loadposts() {
         likerow.append(likebutton);
         likerow.append(likenum);
 
+        // crea el contenido del post
 
         postitem.innerHTML = `<h5>@<strong>${creator}</strong> <small>${time}</small></h5> 
-        <p class="lead">${body}</p>`;  
+        <p class="lead">${body}</p><p class="lead">liked:${postliked} ${liked}</p>`;  
+
+        // accion del boton like
 
         likebutton.addEventListener('click', () => {
           if (document.querySelector('#nametitle') === null){
@@ -150,12 +175,15 @@ function loadposts() {
             
           })
 
+        // appenda los items y el post
+
         divpost.append(postitem);
         divpost.append(likerow);
         document.querySelector('#postsview').append(divpost);
 
-        divpost.addEventListener('click', () => 
-        //alert(`${creator}`));  
+        // accion del click post user
+
+        divpost.addEventListener('click', () =>   
         loaduser(`${creator}`));  
       }
       
@@ -219,6 +247,7 @@ function loaduser(creator) {
 
       for (let post of data.posts) {
         const creator = post.creator;
+        const post_id = post.id;
         const idpost1 = post.id;
         const idpost =`post${post.id}`;
         const body = post.body;
@@ -228,16 +257,25 @@ function loaduser(creator) {
         const postitem = document.createElement('div');
         postitem.name = "itempost";
         divpost.style.border = "1px solid rgb(230, 224, 224)"
-        //emailitem.style.borderRadius = "1%"
         divpost.style.margin = "20px";
         divpost.style.padding = "5px";
         divpost.id = idpost;
-        /* postitem.innerHTML = `${time}<br/>User: <strong>${creator}</strong> 
-        <br/>${body}<br/>Likes: ${likes}`;  */
+        const postliked = data.likedposts;
 
         postitem.innerHTML = `<h5>@<strong>${creator}</strong> <small>${time}</small></h5> 
         <p class="lead">${body}</p>`; 
+
+        //para revisar si el usuario ya likeo el post
+
+        if (postliked.find(i => (i === post_id))) {
+          var liked = true;
+          }
+        else {
+          var liked = false;
+        }
         
+        // boton like
+
         const likebutton = document.createElement('button');
 
         likebutton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
@@ -245,9 +283,14 @@ function loaduser(creator) {
         </svg>`;
 
         likebutton.className = "col-1 ms-2 mb-2 btn btn-danger"
-        likebutton.style.color = "grey"; //red
         likebutton.style.borderColor = "white";
         likebutton.style.backgroundColor = "white";
+        if (liked == true){
+          likebutton.style.color = "red";
+        }
+        else {likebutton.style.color = "grey";}
+
+        // fila de like
 
         const likerow = document.createElement('div');
         likerow.className = "row align-items-start"
@@ -291,7 +334,7 @@ function loaduser(creator) {
           }
 
         }
-        
+
         likebutton.addEventListener('click', () => {
           if (document.querySelector('#nametitle') === null){
             alert("you need to log in to like!");}
@@ -304,7 +347,7 @@ function loaduser(creator) {
               })
               .then(() => {
                 counter=0;
-                loadposts()})
+                loaduser(creator)})
             )
             
           })
@@ -314,7 +357,7 @@ function loaduser(creator) {
 
       }
 
-        // Display message on the screen
+        
         
     })
 }
@@ -356,8 +399,7 @@ function loadfollowing() {
         divpost.append(postitem);
         document.querySelector('#userview').append(divpost);
 
-        postitem.addEventListener('click', () => 
-        //alert(`${creator}`));  
+        postitem.addEventListener('click', () =>   
         loaduser(`${creator}`));  
       }
       
