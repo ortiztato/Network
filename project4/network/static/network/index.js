@@ -74,7 +74,7 @@ function loadposts() {
     const title = document.createElement('h2');
     title.innerHTML = "All Posts";
     title.id = "title"
-    title.style.margin = "20px";
+    title.className = "row m-4";
     document.querySelector('#postsview').append(title);
 
     // busca la data
@@ -143,11 +143,13 @@ function loadposts() {
         // crea la base del post
 
         const divpost = document.createElement('div');
+        const divrow = document.createElement('div');
         const postitem = document.createElement('div');
         postitem.name = "itempost";
-        divpost.style.border = "1px solid rgb(230, 224, 224)"
-        divpost.style.margin = "20px";
-        divpost.style.padding = "5px";       
+        divpost.className = "container-fluid mx-auto my-2 p-2"
+        divrow.className = "row align-items-start" 
+        postitem.className = "col-10"//"col-md-auto mx-0"
+        divpost.style.border = "1px solid rgb(230, 224, 224)"       
         
 
         // boton de like
@@ -158,7 +160,7 @@ function loadposts() {
         <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
         </svg>`;
 
-        likebutton.className = "col-1 ms-2 mb-2 btn btn-danger"
+        likebutton.className = "col-1 m-0 p-1 btn btn-danger" // "col-1 ms-2 mb-2 btn btn-danger"
         likebutton.style.borderColor = "white";
         likebutton.style.backgroundColor = "white";
         if (liked == true){
@@ -166,15 +168,12 @@ function loadposts() {
         }
         else {likebutton.style.color = "grey";}
         
-        // crea la fila para el like
+        // contador de likes
 
-        const likerow = document.createElement('div');
-        likerow.className = "row align-items-center"
+        // likerow.className = "col-md-auto mx-0" // likerow.className = "row align-items-center"
         const likenum = document.createElement('div');
         likenum.innerHTML = `<h6>${likes}</h6>`;
-        likenum.className = "col-1"
-        likerow.append(likebutton);
-        likerow.append(likenum);
+        likenum.className = "col-1 mt-2 mx-0"
 
         // crea el contenido del post
 
@@ -202,8 +201,10 @@ function loadposts() {
 
         // appenda los items y el post
 
-        divpost.append(postitem);
-        divpost.append(likerow);
+        divrow.append(postitem);
+        divrow.append(likebutton);
+        divrow.append(likenum);
+        divpost.append(divrow);
         document.querySelector('#postsview').append(divpost);
 
         // accion del click post user
@@ -236,8 +237,9 @@ function loaduser(creator) {
 
     const title = document.createElement('h2');
     title.innerHTML = `User: ${creator}`;
-    title.style.margin = "20px";
+    title.className = "row m-4";
     document.querySelector('#userview').append(title);
+
 
     // counter para el pagination
 
@@ -302,13 +304,13 @@ function loaduser(creator) {
         const follow = document.createElement('button');
         if (followdata){
           follow.innerHTML = "Unfollow";
-          follow.className = "btn btn-danger";
+          follow.className = "btn ms-3 mb-2 btn-danger";
         }
         else {
           follow.innerHTML = "Follow";
-          follow.className = "btn btn-success";
+          follow.className = "btn ms-3 mb-2 btn-success";
         }
-        follow.style.marginLeft = "20px";
+        //follow.style.marginLeft = "20px";
         document.querySelector('#userview').append(follow);
 
         follow.addEventListener('click', () => {
@@ -335,14 +337,20 @@ function loaduser(creator) {
         const body = post.body;
         const time = post.timestamp;
         const likes = post.likes;
+        const postliked = data.likedposts;
+        
+
+        // crea la base del post
+
         const divpost = document.createElement('div');
+        divpost.id = idpost;
+        const divrow = document.createElement('div');
         const postitem = document.createElement('div');
         postitem.name = "itempost";
-        divpost.style.border = "1px solid rgb(230, 224, 224)"
-        divpost.style.margin = "20px";
-        divpost.style.padding = "5px";
-        divpost.id = idpost;
-        const postliked = data.likedposts;
+        divpost.className = "container-fluid mx-auto my-2 p-2"
+        divrow.className = "row align-items-start" 
+        postitem.className = "col-10"//"col-md-auto mx-0"
+        divpost.style.border = "1px solid rgb(230, 224, 224)" 
 
         postitem.innerHTML = `<h5>@<strong>${creator}</strong> <small>${time}</small></h5> 
         <p class="lead">${body}</p>`; 
@@ -355,8 +363,8 @@ function loaduser(creator) {
         else {
           var liked = false;
         }
-        
-        // boton like
+
+        // boton de like
 
         const likebutton = document.createElement('button');
 
@@ -364,28 +372,29 @@ function loaduser(creator) {
         <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
         </svg>`;
 
-        likebutton.className = "col-1 ms-2 mb-2 btn btn-danger"
+        likebutton.className = "col-1 m-0 p-1 btn btn-danger" // "col-1 ms-2 mb-2 btn btn-danger"
         likebutton.style.borderColor = "white";
         likebutton.style.backgroundColor = "white";
         if (liked == true){
           likebutton.style.color = "red";
         }
         else {likebutton.style.color = "grey";}
+        
+        // contador de likes
 
-        // fila de like
-
-        const likerow = document.createElement('div');
-        likerow.className = "row align-items-start"
+        // likerow.className = "col-md-auto mx-0" // likerow.className = "row align-items-center"
         const likenum = document.createElement('div');
         likenum.innerHTML = `<h6>${likes}</h6>`;
-        likenum.className = "col-1 mt-2"
-        likerow.append(likebutton);
-        likerow.append(likenum);
-        
-        // apenda los elementos
+        likenum.className = "col-1 mt-2 mx-0"
 
-        divpost.append(postitem);
-        divpost.append(likerow);
+
+        // appenda los items y el post
+
+        divrow.append(postitem);
+        divrow.append(likebutton);
+        divrow.append(likenum);
+        divpost.append(divrow);
+        document.querySelector('#userview').append(divpost);
 
         // opcion de editar
 
@@ -465,8 +474,10 @@ function loadfollowing() {
   const title = document.createElement('h2');
   title.innerHTML = 'Users Following';
   title.id = "titleuser"
-  title.style.margin = "20px";
+  title.className = "row m-4";
   document.querySelector('#userview').append(title);
+
+  
 
   // counter para el pagination
 
@@ -482,8 +493,6 @@ function loadfollowing() {
     console.log(data)
 
     // pagination
-    
-    // pagination 
 
     totalposts = data.totalposts;
     pages = Math.ceil(totalposts/quantity)
@@ -516,20 +525,6 @@ function loadfollowing() {
       loadfollowing()})
     document.querySelector('#pages').append(nextbutton);
 
-    /* totalposts = data.totalposts;
-    pages = Math.ceil(totalposts/quantity)
-    document.querySelector('#pages').style.display = 'inline-block';
-    document.querySelector('#pages').innerHTML = '';
-    for (let i=1; i<pages+1; i++) {
-      const pagebutton = document.createElement('button');
-      pagebutton.innerHTML = `${i}`;
-      pagebutton.className = "btn btn-primary btn-sm mx-1";
-      pagebutton.addEventListener('click', () => {
-        counter = (i*quantity) - 10;
-        loadfollowing()
-      })
-      document.querySelector('#pages').append(pagebutton);
-    } */
 
     // carga los posts
 
@@ -551,15 +546,17 @@ function loadfollowing() {
         var liked = false;
       }
 
-
+      
       // crea la base del post
 
       const divpost = document.createElement('div');
+      const divrow = document.createElement('div');
       const postitem = document.createElement('div');
       postitem.name = "itempost";
+      divpost.className = "container-fluid mx-auto my-2 p-2"
+      divrow.className = "row align-items-start" 
+      postitem.className = "col-10"//"col-md-auto mx-0"
       divpost.style.border = "1px solid rgb(230, 224, 224)"
-      divpost.style.margin = "20px";
-      divpost.style.padding = "5px";       
       
 
       // boton de like
@@ -570,7 +567,7 @@ function loadfollowing() {
       <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
       </svg>`;
 
-      likebutton.className = "col-1 ms-2 mb-2 btn btn-danger"
+      likebutton.className = "col-1 m-0 p-1 btn btn-danger" // "col-1 ms-2 mb-2 btn btn-danger"
       likebutton.style.borderColor = "white";
       likebutton.style.backgroundColor = "white";
       if (liked == true){
@@ -578,15 +575,13 @@ function loadfollowing() {
       }
       else {likebutton.style.color = "grey";}
       
-      // crea la fila para el like
+      // contador de likes
 
-      const likerow = document.createElement('div');
-      likerow.className = "row align-items-center"
+      // likerow.className = "col-md-auto mx-0" // likerow.className = "row align-items-center"
       const likenum = document.createElement('div');
       likenum.innerHTML = `<h6>${likes}</h6>`;
-      likenum.className = "col-1"
-      likerow.append(likebutton);
-      likerow.append(likenum);
+      likenum.className = "col-1 mt-2 mx-0"
+
 
       // crea el contenido del post
 
@@ -614,8 +609,10 @@ function loadfollowing() {
 
       // appenda los items y el post
 
-      divpost.append(postitem);
-      divpost.append(likerow);
+      divrow.append(postitem);
+      divrow.append(likebutton);
+      divrow.append(likenum);
+      divpost.append(divrow);
       document.querySelector('#userview').append(divpost);
 
       // accion del click post user
