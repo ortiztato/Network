@@ -21,12 +21,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.querySelector('#following').addEventListener('click', () => {
       document.querySelector('#newpostview').style.display = 'block';
+      counter = 0;
       loadfollowing();
   })
 
     document.querySelector('#nametitle').addEventListener('click', () => {
       document.querySelector('#newpostview').style.display = 'block';
-      nametitle = document.querySelector('#nametitle').innerText
+      nametitle = document.querySelector('#nametitle').innerText;
+      counter = 0;
       loaduser(nametitle);
 })
 
@@ -50,15 +52,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 })
 
-// acciones de los botones del navigation
-
-document.querySelector('#next').addEventListener('click', () => {
-  loadposts()
-})
-document.querySelector('#previous').addEventListener('click', () => {
-  counter = counter - quantity*2;
-  loadposts()
-})
 
 // funcion principal que carga los posts
 
@@ -80,6 +73,7 @@ function loadposts() {
   
     const title = document.createElement('h2');
     title.innerHTML = "All Posts";
+    title.id = "title"
     title.style.margin = "20px";
     document.querySelector('#postsview').append(title);
 
@@ -90,12 +84,23 @@ function loadposts() {
     .then(data => {
       console.log(data)
 
+      
+
       // pagination 
 
       totalposts = data.totalposts;
       pages = Math.ceil(totalposts/quantity)
       document.querySelector('#pages').style.display = 'inline-block';
       document.querySelector('#pages').innerHTML = '';
+      // previous button
+      const previousbutton = document.createElement('button');
+      previousbutton.innerHTML = "Previous";
+      previousbutton.className = "btn btn-primary btn-sm mx-1";
+      previousbutton.addEventListener('click', () => {
+      counter = counter - quantity*2;
+      loadposts()})
+      document.querySelector('#pages').append(previousbutton);
+      // page buttons
       for (let i=1; i<pages+1; i++) {
         const pagebutton = document.createElement('button');
         pagebutton.innerHTML = `${i}`;
@@ -105,24 +110,16 @@ function loadposts() {
           loadposts()
         })
         document.querySelector('#pages').append(pagebutton);
-
-
-        /* //document.querySelector('#pages').innerHTML += `<span class="col-1 text-center" id="page${i}">${i}</span>`
-        document.querySelector('#pages').innerHTML += `<button type="button" class="btn btn-primary btn-sm mx-1" id="page${i}">${i}</button>`;
-        
-        document.querySelector(`#page${i}`).onclick = () => {
-          counter = (i*quantity) - 10;
-          loadposts()
-
-        } */
-        
-        /* document.querySelector(`#page${i}`).addEventListener('click', () => {
-          counter = (i*quantity) - 10;
-          loadposts()
-
-        }) */
-
       }
+      // next button
+      const nextbutton = document.createElement('button');
+      nextbutton.innerHTML = "Next";
+      nextbutton.className = "btn btn-primary btn-sm mx-1";
+      nextbutton.addEventListener('click', () => {
+      loadposts()})
+      document.querySelector('#pages').append(nextbutton);
+
+      // carga los posts
 
       for (let post of data.posts) {
 
@@ -211,8 +208,12 @@ function loadposts() {
 
         // accion del click post user
 
-        postitem.addEventListener('click', () =>   
-        loaduser(`${creator}`));  
+        postitem.addEventListener('click', () => {
+        counter = 0;  
+        loaduser(`${creator}`)
+        });
+        
+          
       }
       
     })
@@ -238,9 +239,16 @@ function loaduser(creator) {
     title.style.margin = "20px";
     document.querySelector('#userview').append(title);
 
-    // busca la data
+    // counter para el pagination
 
-    fetch(`/loaduserposts/${creator}`)
+    const start = counter;
+    const end = start + quantity;
+    counter = end;
+
+    // busca la data
+    
+    fetch(`/loaduserposts/${creator}?start=${start}&end=${end}`)
+    /* fetch(`/loaduserposts/${creator}`) */
     .then(response => response.json())
     .then(data => {
       console.log(data)
@@ -252,6 +260,41 @@ function loaduser(creator) {
       userdata.innerHTML = `Followed: ${followed}<br/>Followers: ${followers}`;
       userdata.style.margin = "20px";
       document.querySelector('#userview').append(userdata);
+
+
+      // pagination 
+
+      totalposts = data.totalposts;
+      pages = Math.ceil(totalposts/quantity)
+      document.querySelector('#pages').style.display = 'inline-block';
+      document.querySelector('#pages').innerHTML = '';
+      // previous button
+      const previousbutton = document.createElement('button');
+      previousbutton.innerHTML = "Previous";
+      previousbutton.className = "btn btn-primary btn-sm mx-1";
+      previousbutton.addEventListener('click', () => {
+      counter = counter - quantity*2;
+      loaduser(creator)})
+      document.querySelector('#pages').append(previousbutton);
+      // page buttons
+      for (let i=1; i<pages+1; i++) {
+        const pagebutton = document.createElement('button');
+        pagebutton.innerHTML = `${i}`;
+        pagebutton.className = "btn btn-primary btn-sm mx-1";
+        pagebutton.addEventListener('click', () => {
+          counter = (i*quantity) - 10;
+          loaduser(creator)
+        })
+        document.querySelector('#pages').append(pagebutton);
+      }
+      // next button
+      const nextbutton = document.createElement('button');
+      nextbutton.innerHTML = "Next";
+      nextbutton.className = "btn btn-primary btn-sm mx-1";
+      nextbutton.addEventListener('click', () => {
+      loaduser(creator)})
+      document.querySelector('#pages').append(nextbutton);
+
      
       // boton de follow
 
@@ -259,11 +302,13 @@ function loaduser(creator) {
         const follow = document.createElement('button');
         if (followdata){
           follow.innerHTML = "Unfollow";
+          follow.className = "btn btn-danger";
         }
         else {
           follow.innerHTML = "Follow";
+          follow.className = "btn btn-success";
         }
-        follow.style.margin = "20px";
+        follow.style.marginLeft = "20px";
         document.querySelector('#userview').append(follow);
 
         follow.addEventListener('click', () => {
@@ -275,7 +320,8 @@ function loaduser(creator) {
               followdata: followdata
             })
           })
-          .then(() => loaduser(creator));
+          .then(() => {counter = 0;
+          loaduser(creator)});
         })
       }
       
@@ -367,7 +413,8 @@ function loaduser(creator) {
                       id: idpost1
                   })
                 })
-              .then(() => loaduser(creator));
+              .then(() => {counter = 0;
+              loaduser(creator)});
               }
             })
           }
@@ -413,38 +460,175 @@ function loadfollowing() {
 
   document.querySelector('#userview').innerHTML = "";
 
+  // titulo
+
   const title = document.createElement('h2');
   title.innerHTML = 'Users Following';
+  title.id = "titleuser"
   title.style.margin = "20px";
   document.querySelector('#userview').append(title);
 
+  // counter para el pagination
 
-  fetch('/loadfollowing')
-    .then(response => response.json())
-    .then(posts => {
-      console.log(posts)
-      for (let post of posts) {
-        const creator = post.creator;
-        //const post_id = post.id;
-        const body = post.body;
-        const time = post.timestamp;
-        const likes = post.likes;
-        const divpost = document.createElement('div');
-        const postitem = document.createElement('div');
-        postitem.name = "itempost";
-        divpost.style.border = "1px solid rgb(230, 224, 224)"
-        divpost.style.margin = "20px";
-        divpost.style.padding = "5px";
-        postitem.innerHTML = `${time}<br/>User: <strong>${creator}</strong> 
-        <br/>${body}<br/>Likes: ${likes}`;        
-        
-        divpost.append(postitem);
-        document.querySelector('#userview').append(divpost);
+  const start = counter;
+  const end = start + quantity;
+  counter = end;
 
-        postitem.addEventListener('click', () =>   
-        loaduser(`${creator}`));  
-      }
+  // busca la data
+
+  fetch(`/loadfollowing?start=${start}&end=${end}`)
+  .then(response => response.json())
+  .then(data => {
+    console.log(data)
+
+    // pagination
+    
+    // pagination 
+
+    totalposts = data.totalposts;
+    pages = Math.ceil(totalposts/quantity)
+    document.querySelector('#pages').style.display = 'inline-block';
+    document.querySelector('#pages').innerHTML = '';
+    // previous button
+    const previousbutton = document.createElement('button');
+    previousbutton.innerHTML = "Previous";
+    previousbutton.className = "btn btn-primary btn-sm mx-1";
+    previousbutton.addEventListener('click', () => {
+    counter = counter - quantity*2;
+    loadfollowing()})
+    document.querySelector('#pages').append(previousbutton);
+    // page buttons
+    for (let i=1; i<pages+1; i++) {
+      const pagebutton = document.createElement('button');
+      pagebutton.innerHTML = `${i}`;
+      pagebutton.className = "btn btn-primary btn-sm mx-1";
+      pagebutton.addEventListener('click', () => {
+        counter = (i*quantity) - 10;
+        loadfollowing()
+      })
+      document.querySelector('#pages').append(pagebutton);
+    }
+    // next button
+    const nextbutton = document.createElement('button');
+    nextbutton.innerHTML = "Next";
+    nextbutton.className = "btn btn-primary btn-sm mx-1";
+    nextbutton.addEventListener('click', () => {
+      loadfollowing()})
+    document.querySelector('#pages').append(nextbutton);
+
+    /* totalposts = data.totalposts;
+    pages = Math.ceil(totalposts/quantity)
+    document.querySelector('#pages').style.display = 'inline-block';
+    document.querySelector('#pages').innerHTML = '';
+    for (let i=1; i<pages+1; i++) {
+      const pagebutton = document.createElement('button');
+      pagebutton.innerHTML = `${i}`;
+      pagebutton.className = "btn btn-primary btn-sm mx-1";
+      pagebutton.addEventListener('click', () => {
+        counter = (i*quantity) - 10;
+        loadfollowing()
+      })
+      document.querySelector('#pages').append(pagebutton);
+    } */
+
+    // carga los posts
+
+    for (let post of data.posts) {
+
+      const creator = post.creator;
+      const post_id = post.id;
+      const body = post.body;
+      const time = post.timestamp;
+      const likes = post.likes;
+      const postliked = data.likedposts;
       
-    })
-}
+      //para revisar si el usuario ya likeo el post
+
+      if (postliked.find(i => (i === post_id))) {
+        var liked = true;
+        }
+      else {
+        var liked = false;
+      }
+
+
+      // crea la base del post
+
+      const divpost = document.createElement('div');
+      const postitem = document.createElement('div');
+      postitem.name = "itempost";
+      divpost.style.border = "1px solid rgb(230, 224, 224)"
+      divpost.style.margin = "20px";
+      divpost.style.padding = "5px";       
+      
+
+      // boton de like
+
+      const likebutton = document.createElement('button');
+
+      likebutton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+      </svg>`;
+
+      likebutton.className = "col-1 ms-2 mb-2 btn btn-danger"
+      likebutton.style.borderColor = "white";
+      likebutton.style.backgroundColor = "white";
+      if (liked == true){
+        likebutton.style.color = "red";
+      }
+      else {likebutton.style.color = "grey";}
+      
+      // crea la fila para el like
+
+      const likerow = document.createElement('div');
+      likerow.className = "row align-items-center"
+      const likenum = document.createElement('div');
+      likenum.innerHTML = `<h6>${likes}</h6>`;
+      likenum.className = "col-1"
+      likerow.append(likebutton);
+      likerow.append(likenum);
+
+      // crea el contenido del post
+
+      postitem.innerHTML = `<h5>@<strong>${creator}</strong> <small>${time}</small></h5> 
+      <p class="lead">${body}</p>`;  
+
+      // accion del boton like
+
+      likebutton.addEventListener('click', () => {
+        if (document.querySelector('#nametitle') === null){
+          alert("you need to log in to like!");}
+        else(
+            fetch('/like', {
+              method: 'PUT',
+              body: JSON.stringify({
+                post_id: post_id,
+              })
+            })
+            .then(() => {
+              counter=0;
+              loadposts()})
+          )
+          
+      })
+
+      // appenda los items y el post
+
+      divpost.append(postitem);
+      divpost.append(likerow);
+      document.querySelector('#userview').append(divpost);
+
+      // accion del click post user
+
+      postitem.addEventListener('click', () =>{
+      counter = 0;   
+      loaduser(`${creator}`)});
+      
+    }
+  })
+
+
   
+      
+  
+}

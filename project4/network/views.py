@@ -94,9 +94,8 @@ def loadposts(request):
     if start<0:
         start = 0
         end = 10
-    posts = Post.objects.all()
+    posts = Post.objects.order_by("-timestamp").all()
     totalposts = Post.objects.all().count()
-    posts = posts.order_by("-timestamp").all()
     posts = posts[start:end]
     posts = [post.serialize() for post in posts]
     
@@ -130,6 +129,13 @@ def loaduserposts(request, creator):
 
     posts = Post.objects.all().filter(creator = usercreator)
     posts = posts.order_by("-timestamp").all()
+    start = int(request.GET.get("start") or 0)
+    end = int(request.GET.get("end") or (start + 9))
+    if start<0:
+        start = 0
+        end = 10
+    totalposts = Post.objects.all().filter(creator = usercreator).count()
+    posts = posts[start:end]
     posts = [post.serialize() for post in posts]
 
     if request.user.is_authenticated:
@@ -146,7 +152,8 @@ def loaduserposts(request, creator):
             "followers": followers,
             "followdata": followdata,
             "posts": posts,
-            "likedposts": list(likedposts)
+            "likedposts": list(likedposts),
+            "totalposts": totalposts,
     }
     #return JsonResponse([post.serialize() for post in posts], safe=False)
     return JsonResponse(data)
@@ -175,9 +182,30 @@ def follow(request):
 
 def loadfollowing(request):
     followed = Follow.objects.filter(userfollower=request.user).values('userfollowed_id')
+    start = int(request.GET.get("start") or 0)
+    end = int(request.GET.get("end") or (start + 9))
+    if start<0:
+        start = 0
+        end = 10
     posts = Post.objects.filter(creator__in=followed).order_by('-timestamp')
-    posts = posts.order_by("-timestamp").all()
-    return JsonResponse([post.serialize() for post in posts], safe=False)
+    #posts = posts.order_by("-timestamp").all()
+    totalposts = Post.objects.filter(creator__in=followed).count()
+    posts = posts[start:end]
+    posts = [post.serialize() for post in posts]
+
+    if request.user.is_authenticated:
+        requester = request.user
+        likedposts = requester.rel_likes.all()
+        likedposts = likedposts.values_list('id', flat=True)
+    else:
+        likedposts = [-1,-1]
+    
+    data = {
+            "totalposts": totalposts,
+            "posts": posts,
+            "likedposts": list(likedposts)
+    }
+    return JsonResponse(data)
 
 @csrf_exempt
 def editpost(request):
