@@ -3,7 +3,7 @@ const quantity = 10;
 
 document.addEventListener('DOMContentLoaded', function() {
 
-    loadposts();
+  loadposts();
 
     // acciones del encabezado
 
@@ -31,6 +31,8 @@ document.addEventListener('DOMContentLoaded', function() {
       counter = 0;
       loaduser(nametitle);
 })
+
+
 
 // accion del post from
 
