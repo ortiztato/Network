@@ -5,6 +5,8 @@ from . import views
 
 urlpatterns = [
     path("", views.index, name="index"),
+    path("network", views.index, name="network"),
+    path("allposts", views.allposts, name="allposts"),
     path("login", views.login_view, name="login"),
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
@@ -14,5 +16,5 @@ urlpatterns = [
     path("loaduserposts/<str:creator>", views.loaduserposts, name="loaduserposts"),
     path("loadfollowing", views.loadfollowing, name="loadfollowing"),
     path("editpost", views.editpost, name="editpost"),
-    path("like", views.like, name="like")
+    path("like", views.like, name="like"),
 ]

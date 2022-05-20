@@ -16,6 +16,9 @@ from .models import User, Post, Follow
 def index(request):
     return render(request, "network/index.html")
 
+def allposts(request):
+    return render(request, "network/allposts.html")
+
 
 def login_view(request):
     if request.method == "POST":

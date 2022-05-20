@@ -1,7 +1,10 @@
 {% extends "network/layout.html" %}
+
 {% load static %}
 
 {% block body %}
+
+
 
     <h2>Login</h2>
 
@@ -21,10 +24,5 @@
     </form>
 
     Don't have an account? <a href="{% url 'register' %}">Register here.</a>
-    
-    <script src="{% static 'network/index.js' %}"></script>
-{% endblock %}
 
-<!-- {% block script %}
-    <script src="{% static 'network/index.js' %}"></script>
-{% endblock %} -->
+{% endblock %}
