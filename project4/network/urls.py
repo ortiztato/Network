@@ -1,5 +1,6 @@
 
 from django.urls import path
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns 
 
 from . import views
 
@@ -18,3 +19,5 @@ urlpatterns = [
     path("editpost", views.editpost, name="editpost"),
     path("like", views.like, name="like"),
 ]
+
+urlpatterns += staticfiles_urlpatterns()
