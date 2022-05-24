@@ -350,7 +350,7 @@ function loaduser(creator) {
             const editbutton = document.createElement('button');
             editbutton.innerHTML = "Edit";
             editbutton.className = "col-1 btn btn-outline-success btn-sm mt-1"
-            likerow.append(editbutton);
+            postitem.append(editbutton);
             editbutton.addEventListener('click', () => {
               document.querySelector(`#${idpost}`).innerHTML = 
               `${time}<br/>
