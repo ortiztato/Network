@@ -90,7 +90,7 @@ def createpost(request):
 
     return JsonResponse({"message": "Email sent successfully."}, status=201)
 
-@csrf_exempt
+
 def loadposts(request):
     start = int(request.GET.get("start") or 0)
     end = int(request.GET.get("end") or (start + 9))
