@@ -124,7 +124,7 @@ function loadposts() {
 
       // crea el contenido del post
 
-      postitem.innerHTML = `<h5><a href="#" style="color:black; text-decoration: none;">@<strong>${creator}</strong></a> <small>${time}</small></h5> 
+      postitem.innerHTML = `<h5><a href="#" style="color:black; text-decoration: none;">@<strong>${creator}</strong></a> <small class="fs-6 opacity-50">${time}</small></h5> 
       <p class="lead">${body}</p>`;
       
 
@@ -132,7 +132,7 @@ function loadposts() {
 
       likebutton.addEventListener('click', () => {
         if (document.querySelector('#nametitle') === null){
-          alert("you need to log in to like!");}
+          alert("you need to log in to like! it's instant, no time wasting.\nFor testing you can log in with \nusername: testing \npass: testing");}
         else(
           fetch('/like', {
             method: 'PUT',
@@ -299,7 +299,7 @@ function loaduser(creator) {
         postitem.className = "col-10"//"col-md-auto mx-0"
         divpost.style.border = "1px solid rgb(230, 224, 224)" 
 
-        postitem.innerHTML = `<h5>@<strong>${creator}</strong> <small>${time}</small></h5> 
+        postitem.innerHTML = `<h5><a href="#" style="color:black; text-decoration: none;">@<strong>${creator}</strong></a> <small class="fs-6 opacity-50">${time}</small></h5> 
         <p class="lead">${body}</p>`; 
 
         // para revisar si el usuario ya likeo el post
@@ -381,7 +381,7 @@ function loaduser(creator) {
 
         likebutton.addEventListener('click', () => {
           if (document.querySelector('#nametitle') === null){
-            alert("you need to log in to like!");}
+            alert("you need to log in to like! it's instant, no time wasting.\nFor testing you can log in with \nusername: testing \npass: testing");}
           else(
               fetch('/like', {
                 method: 'PUT',
@@ -529,14 +529,14 @@ function loadfollowing() {
 
       // crea el contenido del post
 
-      postitem.innerHTML = `<h5>@<strong>${creator}</strong> <small>${time}</small></h5> 
+      postitem.innerHTML = `<h5><a href="#" style="color:black; text-decoration: none;">@<strong>${creator}</strong></a> <small class="fs-6 opacity-50">${time}</small></h5> 
       <p class="lead">${body}</p>`;  
 
       // accion del boton like
 
       likebutton.addEventListener('click', () => {
         if (document.querySelector('#nametitle') === null){
-          alert("you need to log in to like!");}
+          alert("you need to log in to like! it's instant, no time wasting.\nFor testing you can log in with \nusername: testing \npass: testing");}
         else(
             fetch('/like', {
               method: 'PUT',

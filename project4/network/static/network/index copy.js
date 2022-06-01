@@ -188,7 +188,7 @@ function loadposts() {
 
       likebutton.addEventListener('click', () => {
         if (document.querySelector('#nametitle') === null){
-          alert("you need to log in to like!");}
+          alert("you need to log in to like! it's instant, no time wasting.\nFor testing you can log in with \nusername: testing \npass: testing");}
         else(
           fetch('/like', {
             method: 'PUT',
@@ -437,7 +437,7 @@ function loaduser(creator) {
 
         likebutton.addEventListener('click', () => {
           if (document.querySelector('#nametitle') === null){
-            alert("you need to log in to like!");}
+            alert("you need to log in to like! it's instant, no time wasting.\nFor testing you can log in with \nusername: testing \npass: testing");}
           else(
               fetch('/like', {
                 method: 'PUT',
@@ -592,7 +592,7 @@ function loadfollowing() {
 
       likebutton.addEventListener('click', () => {
         if (document.querySelector('#nametitle') === null){
-          alert("you need to log in to like!");}
+          alert("you need to log in to like! it's instant, no time wasting.\nFor testing you can log in with \nusername: testing \npass: testing");}
         else(
             fetch('/like', {
               method: 'PUT',
