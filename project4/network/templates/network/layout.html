@@ -2,17 +2,72 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>{% block title %}Social Network{% endblock %}</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">  
 
-    </head>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-AU-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Social Network{% endblock %}</title>
+    <link href="{% static 'network/templates.css' %}" rel="stylesheet">
+    <link href="{% static 'network/main.css' %}" rel="stylesheet">
+    <link href="{% static 'network/navbar.css' %}" rel="stylesheet">
+    <script defer src="{% static 'network/app.js' %}"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
+        rel="stylesheet">
 
-    <body>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</head>
 
-        <nav class="navbar navbar-expand-lg navbar-light bg-light"> <!-- justify-content-center -->
+<body>
+    <header class="topheader">
+        <nav class="topnav">
+            <a href="{% url 'network' %}" class="logo" id="network">
+
+                <img src="{% static 'network/media/bird.svg' %}" alt="home" height="30px" />
+
+                <img src="{% static 'network/media/logotexto.png' %}" alt="home" height="50px" />
+            </a>
+            <button class="open-menu" aria-label="Open menu">
+                <img src="{% static 'network/media/hamburger-icon.svg' %}" alt="abrir menú" height="20px" />
+            </button>
+            <ul class="menu">
+                <button class="close-menu" aria-label="Close menu">
+                    <img src="{% static 'network/media/close-icon.svg' %}" alt="cerrar menú" />
+                </button>
+                {% if user.is_authenticated %}
+                <li>
+                    <a id="nametitle"><strong>{{user.username}}</strong></a>
+                </li>
+                {% endif %}
+                <li>
+                    <a href="{% url 'allposts' %}" id="allposts">ALL POSTS</a>
+                </li>
+                {% if user.is_authenticated %}
+                <li>
+                    <a href="#" id="following">FOLLOWING</a>
+                </li>
+                <li>
+                    <a href="{% url 'logout' %}">LOG OUT</a>
+                </li>
+                {% else %}
+                <li>
+                    <a href="{% url 'login' %}">LOG IN</a>
+                </li>
+                <li>
+                    <a href="{% url 'register' %}">REGISTER</a>
+                </li>
+                <li>
+                    <a style="width: 100px;"></a>
+                </li>
+                {% endif %}
+            </ul>
+
+        </nav>
+    </header>
+
+    <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
                 <a href="{% url 'network' %}" class="nav-link" id="network">
                 
@@ -27,8 +82,7 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse justify-content-center me-5" id="navbarSupportedContent"> <!-- revisar de tratarlo como un elemento flex de bootstrap -->
-                    <!-- <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent"> -->
+                <div class="collapse navbar-collapse justify-content-center me-5" id="navbarSupportedContent"> 
                     <ul class="navbar-nav ">
                       {% if user.is_authenticated %}
                           <li class="nav-item">
@@ -59,18 +113,20 @@
                     </ul>
                 </div>
             </div>
-        </nav>
-        
-        <div class="body">
-            <div class="row m-2 justify-content-center">
-                <div class="col-xl-6 col-lg-8 align-self-center">
-                    {% block body %}
-                    {% endblock %}
-                </div>
-            </div>
-            
-            
+        </nav> -->
+
+    <section id="bodysection">
+        <div class="divbody">
+            {% block body %}
+            {% endblock %}
         </div>
-        
-    </body> 
+    </section>
+    <footer>
+        <div class="container">
+            <p>&copy; Santiago Ortiz Basualdo</p>
+        </div>
+    </footer>
+
+</body>
+
 </html>

@@ -1,7 +1,7 @@
 var counter = 0
 var quantity = 10;
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   document.querySelector('#newpostview').style.display = 'none';
   loadposts();
 

@@ -4,7 +4,7 @@ var quantity = 10;
 function loadposts() {
 
   // carga las vistas
-  
+
   document.querySelector('#postsview').style.display = 'block';
   document.querySelector('#userview').style.display = 'none';
   document.querySelector('#postsview').innerHTML = "";
@@ -16,187 +16,191 @@ function loadposts() {
   counter = end;
 
   // titulo
-  
+
   const title = document.createElement('h2');
   title.innerHTML = "All Posts";
   title.id = "title"
-  title.className = "row m-4";
+  title.className = "titleallposts";
   document.querySelector('#postsview').append(title);
 
   // busca la data
 
   fetch(`/loadposts?start=${start}&end=${end}`)
-  .then(response => response.json())
-  .then(data => {
-    console.log(data)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data)
 
-      
 
-    // pagination 
 
-    totalposts = data.totalposts;
-    pages = Math.ceil(totalposts/quantity)
-    document.querySelector('#pages').style.display = 'inline-block';
-    document.querySelector('#pages').innerHTML = '';
-    // previous button
-    const previousbutton = document.createElement('button');
-    previousbutton.innerHTML = "Previous";
-    previousbutton.className = "btn btn-primary btn-sm mx-1";
-    previousbutton.addEventListener('click', () => {
-    counter = counter - quantity*2;
-    loadposts()})
-    document.querySelector('#pages').append(previousbutton);
-    // page buttons
-    for (let i=1; i<pages+1; i++) {
-      const pagebutton = document.createElement('button');
-      pagebutton.innerHTML = `${i}`;
-      pagebutton.className = "btn btn-primary btn-sm mx-1";
-      pagebutton.addEventListener('click', () => {
-        counter = (i*quantity) - 10;
+      // pagination 
+
+      totalposts = data.totalposts;
+      pages = Math.ceil(totalposts / quantity)
+      document.querySelector('#pages').style.display = 'inline-block';
+      document.querySelector('#pages').innerHTML = '';
+      // previous button
+      const previousbutton = document.createElement('button');
+      previousbutton.innerHTML = "Previous";
+      previousbutton.className = "btn btn-primary btn-sm mx-1";
+      previousbutton.addEventListener('click', () => {
+        counter = counter - quantity * 2;
         loadposts()
       })
-      document.querySelector('#pages').append(pagebutton);
-    }
-    
-    // next button
-    const nextbutton = document.createElement('button');
-    nextbutton.innerHTML = "Next";
-    nextbutton.className = "btn btn-primary btn-sm mx-1";
-    nextbutton.addEventListener('click', () => {
-    loadposts()})
-    document.querySelector('#pages').append(nextbutton);
-
-    // carga los posts
-
-    for (let post of data.posts) {
-
-      const creator = post.creator;
-      const post_id = post.id;
-      const body = post.body;
-      const time = post.timestamp;
-      const likes = post.likes;
-      const postliked = data.likedposts;
-      
-      //para revisar si el usuario ya likeo el post
-
-      if (postliked.find(i => (i === post_id))) {
-        var liked = true;
-        }
-      else {
-        var liked = false;
+      document.querySelector('#pages').append(previousbutton);
+      // page buttons
+      for (let i = 1; i < pages + 1; i++) {
+        const pagebutton = document.createElement('button');
+        pagebutton.innerHTML = `${i}`;
+        pagebutton.className = "btn btn-primary btn-sm mx-1";
+        pagebutton.addEventListener('click', () => {
+          counter = (i * quantity) - 10;
+          loadposts()
+        })
+        document.querySelector('#pages').append(pagebutton);
       }
 
+      // next button
+      const nextbutton = document.createElement('button');
+      nextbutton.innerHTML = "Next";
+      nextbutton.className = "btn btn-primary btn-sm mx-1";
+      nextbutton.addEventListener('click', () => {
+        loadposts()
+      })
+      document.querySelector('#pages').append(nextbutton);
 
-      // crea la base del post
+      // carga los posts
 
-      const divpost = document.createElement('div');
-      const divrow = document.createElement('div');
-      const postitem = document.createElement('div');
-      postitem.name = "itempost";
-      divpost.className = "container-fluid mx-auto my-2 p-2"
-      divrow.className = "row align-items-start" 
-      postitem.className = "col-10"//"col-md-auto mx-0"
-      divpost.style.border = "1px solid rgb(230, 224, 224)"       
-      
+      for (let post of data.posts) {
 
-      // boton de like
+        const creator = post.creator;
+        const post_id = post.id;
+        const body = post.body;
+        const time = post.timestamp;
+        const likes = post.likes;
+        const postliked = data.likedposts;
 
-      const likebutton = document.createElement('button');
+        //para revisar si el usuario ya likeo el post
 
-      likebutton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+        if (postliked.find(i => (i === post_id))) {
+          var liked = true;
+        }
+        else {
+          var liked = false;
+        }
+
+
+        // crea la base del post
+
+        const divpost = document.createElement('div');
+        const divrow = document.createElement('div');
+        const postitem = document.createElement('div');
+        postitem.name = "itempost";
+        divpost.className = "divpost"
+        divrow.className = "divrow"
+        postitem.className = "divtext"//"col-md-auto mx-0"
+        divpost.style.border = "1px solid rgb(230, 224, 224)"
+
+
+        // boton de like
+
+        const likebutton = document.createElement('button');
+
+        likebutton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
       <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
       </svg>`;
 
-      likebutton.className = "col-1 m-0 p-1 btn btn-danger" // "col-1 ms-2 mb-2 btn btn-danger"
-      likebutton.style.borderColor = "white";
-      likebutton.style.backgroundColor = "white";
-      if (liked == true){
-        likebutton.style.color = "red";
-      }
-      else {likebutton.style.color = "grey";}
-      
-      // contador de likes
+        likebutton.className = "col-1 m-0 p-1 btn btn-danger" // "col-1 ms-2 mb-2 btn btn-danger"
+        likebutton.style.borderColor = "white";
+        likebutton.style.backgroundColor = "white";
+        if (liked == true) {
+          likebutton.style.color = "red";
+        }
+        else { likebutton.style.color = "grey"; }
 
-      // likerow.className = "col-md-auto mx-0" // likerow.className = "row align-items-center"
-      const likenum = document.createElement('div');
-      likenum.innerHTML = `<h6>${likes}</h6>`;
-      likenum.className = "col-1 mt-2 mx-0"
+        // contador de likes
 
-      // crea el contenido del post
+        // likerow.className = "col-md-auto mx-0" // likerow.className = "row align-items-center"
+        const likenum = document.createElement('div');
+        likenum.innerHTML = `<h6>${likes}</h6>`;
+        likenum.className = "col-1 mt-2 mx-0"
 
-      postitem.innerHTML = `<h5><a href="#" style="color:black; text-decoration: none;">@<strong>${creator}</strong></a> <small class="fs-6 opacity-50">${time}</small></h5> 
+        // crea el contenido del post
+
+        postitem.innerHTML = `<h5><a href="#" style="color:black; text-decoration: none;">@<strong>${creator}</strong></a> <small class="fs-6 opacity-50">${time}</small></h5> 
       <p class="lead">${body}</p>`;
-      
 
-      // accion del boton like
 
-      likebutton.addEventListener('click', () => {
-        if (document.querySelector('#nametitle') === null){
-          alert("you need to log in to like! it's instant, no time wasting.\nFor testing you can log in with \nusername: testing \npass: testing");}
-        else(
-          fetch('/like', {
-            method: 'PUT',
-            body: JSON.stringify({
-              post_id: post_id,
+        // accion del boton like
+
+        likebutton.addEventListener('click', () => {
+          if (document.querySelector('#nametitle') === null) {
+            alert("you need to log in to like! it's instant, no time wasting.\nFor testing you can log in with \nusername: testing \npass: testing");
+          }
+          else (
+            fetch('/like', {
+              method: 'PUT',
+              body: JSON.stringify({
+                post_id: post_id,
+              })
             })
-          })
-          .then(() => {
-          counter=0;
-          loadposts()})
-        )
-          
-      })
+              .then(() => {
+                counter = 0;
+                loadposts()
+              })
+          )
 
-      // appenda los items y el post
+        })
 
-      divrow.append(postitem);
-      divrow.append(likebutton);
-      divrow.append(likenum);
-      divpost.append(divrow);
-      document.querySelector('#postsview').append(divpost);
+        // appenda los items y el post
 
-      // accion del click post user
+        divrow.append(postitem);
+        divrow.append(likebutton);
+        divrow.append(likenum);
+        divpost.append(divrow);
+        document.querySelector('#postsview').append(divpost);
 
-      postitem.addEventListener('click', () => {
-        counter = 0;  
-        loaduser(`${creator}`)
-      });
-      
-    }
-      
-  })
-    
+        // accion del click post user
+
+        postitem.addEventListener('click', () => {
+          counter = 0;
+          loaduser(`${creator}`)
+        });
+
+      }
+
+    })
+
 }
 
 // funcion que carga los post de un user especifico
 
 function loaduser(creator) {
-    
-    // carga las vistas
 
-    document.querySelector('#postsview').style.display = 'none';
-    document.querySelector('#newpostview').style.display = 'none';
-    document.querySelector('#userview').style.display = 'block';
+  // carga las vistas
 
-    document.querySelector('#userview').innerHTML = "";
+  document.querySelector('#postsview').style.display = 'none';
+  document.querySelector('#newpostview').style.display = 'none';
+  document.querySelector('#userview').style.display = 'block';
 
-    // titulo
+  document.querySelector('#userview').innerHTML = "";
 
-    const title = document.createElement('h2');
-    title.innerHTML = `User: ${creator}`;
-    title.className = "row m-4";
-    document.querySelector('#userview').append(title);
+  // titulo
+
+  const title = document.createElement('h2');
+  title.innerHTML = `User: ${creator}`;
+  title.className = "row m-4";
+  document.querySelector('#userview').append(title);
 
 
-    // counter para el pagination
+  // counter para el pagination
 
-    const start = counter;
-    const end = start + quantity;
-    counter = end;
+  const start = counter;
+  const end = start + quantity;
+  counter = end;
 
-    // busca la data
-    
-    fetch(`/loaduserposts/${creator}?start=${start}&end=${end}`)
+  // busca la data
+
+  fetch(`/loaduserposts/${creator}?start=${start}&end=${end}`)
     /* fetch(`/loaduserposts/${creator}`) */
     .then(response => response.json())
     .then(data => {
@@ -214,7 +218,7 @@ function loaduser(creator) {
       // pagination 
 
       totalposts = data.totalposts;
-      pages = Math.ceil(totalposts/quantity)
+      pages = Math.ceil(totalposts / quantity)
       document.querySelector('#pages').style.display = 'inline-block';
       document.querySelector('#pages').innerHTML = '';
       // previous button
@@ -222,16 +226,17 @@ function loaduser(creator) {
       previousbutton.innerHTML = "Previous";
       previousbutton.className = "btn btn-primary btn-sm mx-1";
       previousbutton.addEventListener('click', () => {
-      counter = counter - quantity*2;
-      loaduser(creator)})
+        counter = counter - quantity * 2;
+        loaduser(creator)
+      })
       document.querySelector('#pages').append(previousbutton);
       // page buttons
-      for (let i=1; i<pages+1; i++) {
+      for (let i = 1; i < pages + 1; i++) {
         const pagebutton = document.createElement('button');
         pagebutton.innerHTML = `${i}`;
         pagebutton.className = "btn btn-primary btn-sm mx-1";
         pagebutton.addEventListener('click', () => {
-          counter = (i*quantity) - 10;
+          counter = (i * quantity) - 10;
           loaduser(creator)
         })
         document.querySelector('#pages').append(pagebutton);
@@ -241,15 +246,16 @@ function loaduser(creator) {
       nextbutton.innerHTML = "Next";
       nextbutton.className = "btn btn-primary btn-sm mx-1";
       nextbutton.addEventListener('click', () => {
-      loaduser(creator)})
+        loaduser(creator)
+      })
       document.querySelector('#pages').append(nextbutton);
 
-     
+
       // boton de follow
 
-      if (userrequest !== creator && userrequest !== 0){
+      if (userrequest !== creator && userrequest !== 0) {
         const follow = document.createElement('button');
-        if (followdata){
+        if (followdata) {
           follow.innerHTML = "Unfollow";
           follow.className = "btn ms-3 mb-2 btn-danger";
         }
@@ -269,23 +275,25 @@ function loaduser(creator) {
               followdata: followdata
             })
           })
-          .then(() => {counter = 0;
-          loaduser(creator)});
+            .then(() => {
+              counter = 0;
+              loaduser(creator)
+            });
         })
       }
-      
+
       // carga los posts
 
       for (let post of data.posts) {
         const creator = post.creator;
         const post_id = post.id;
         const idpost1 = post.id;
-        const idpost =`post${post.id}`;
+        const idpost = `post${post.id}`;
         const body = post.body;
         const time = post.timestamp;
         const likes = post.likes;
         const postliked = data.likedposts;
-        
+
 
         // crea la base del post
 
@@ -295,18 +303,18 @@ function loaduser(creator) {
         const postitem = document.createElement('div');
         postitem.name = "itempost";
         divpost.className = "container-fluid mx-auto my-2 p-2"
-        divrow.className = "row align-items-start" 
-        postitem.className = "col-10"//"col-md-auto mx-0"
-        divpost.style.border = "1px solid rgb(230, 224, 224)" 
+        divrow.className = "row align-items-start"
+        postitem.className = "divtext"//"col-md-auto mx-0"
+        divpost.style.border = "1px solid rgb(230, 224, 224)"
 
         postitem.innerHTML = `<h5><a href="#" style="color:black; text-decoration: none;">@<strong>${creator}</strong></a> <small class="fs-6 opacity-50">${time}</small></h5> 
-        <p class="lead">${body}</p>`; 
+        <p class="lead">${body}</p>`;
 
         // para revisar si el usuario ya likeo el post
 
         if (postliked.find(i => (i === post_id))) {
           var liked = true;
-          }
+        }
         else {
           var liked = false;
         }
@@ -322,11 +330,11 @@ function loaduser(creator) {
         likebutton.className = "col-1 m-0 p-1 btn btn-danger" // "col-1 ms-2 mb-2 btn btn-danger"
         likebutton.style.borderColor = "white";
         likebutton.style.backgroundColor = "white";
-        if (liked == true){
+        if (liked == true) {
           likebutton.style.color = "red";
         }
-        else {likebutton.style.color = "grey";}
-        
+        else { likebutton.style.color = "grey"; }
+
         // contador de likes
 
         // likerow.className = "col-md-auto mx-0" // likerow.className = "row align-items-center"
@@ -345,15 +353,15 @@ function loaduser(creator) {
 
         // opcion de editar
 
-        if (document.querySelector('#nametitle') !== null){
-          if (document.querySelector('#nametitle').innerText === creator){
+        if (document.querySelector('#nametitle') !== null) {
+          if (document.querySelector('#nametitle').innerText === creator) {
             const editbutton = document.createElement('button');
             editbutton.innerHTML = "Edit";
             editbutton.className = "col-1 btn btn-outline-success btn-sm mt-1"
             postitem.append(editbutton);
             editbutton.addEventListener('click', () => {
-              document.querySelector(`#${idpost}`).innerHTML = 
-              `${time}<br/>
+              document.querySelector(`#${idpost}`).innerHTML =
+                `${time}<br/>
               User: <strong>${creator}</strong><br/>
               Likes: ${likes}<br/>
               <form id="postform${idpost}">
@@ -365,12 +373,14 @@ function loaduser(creator) {
                 fetch('/editpost', {
                   method: 'PUT',
                   body: JSON.stringify({
-                      body: document.querySelector(`#bodyform${idpost}`).value,
-                      id: idpost1
+                    body: document.querySelector(`#bodyform${idpost}`).value,
+                    id: idpost1
                   })
                 })
-              .then(() => {counter = 0;
-              loaduser(creator)});
+                  .then(() => {
+                    counter = 0;
+                    loaduser(creator)
+                  });
               }
             })
           }
@@ -380,33 +390,35 @@ function loaduser(creator) {
         // accion sobre el boton de like
 
         likebutton.addEventListener('click', () => {
-          if (document.querySelector('#nametitle') === null){
-            alert("you need to log in to like! it's instant, no time wasting.\nFor testing you can log in with \nusername: testing \npass: testing");}
-          else(
-              fetch('/like', {
-                method: 'PUT',
-                body: JSON.stringify({
-                  post_id: post_id,
-                })
+          if (document.querySelector('#nametitle') === null) {
+            alert("you need to log in to like! it's instant, no time wasting.\nFor testing you can log in with \nusername: testing \npass: testing");
+          }
+          else (
+            fetch('/like', {
+              method: 'PUT',
+              body: JSON.stringify({
+                post_id: post_id,
               })
+            })
               .then(() => {
-                counter=0;
-                loaduser(creator)})
-            )
-            
-          })
-        
-        
-      document.querySelector('#userview').append(divpost);
+                counter = 0;
+                loaduser(creator)
+              })
+          )
+
+        })
+
+
+        document.querySelector('#userview').append(divpost);
+      }
     }
-  }
-  )
+    )
 }
 
-  // funcion que carga los post de los users que follow
+// funcion que carga los post de los users que follow
 
 function loadfollowing() {
-    
+
   document.querySelector('#postsview').style.display = 'none';
   document.querySelector('#newpostview').style.display = 'none';
   document.querySelector('#userview').style.display = 'block';
@@ -421,7 +433,7 @@ function loadfollowing() {
   title.className = "row m-4";
   document.querySelector('#userview').append(title);
 
-  
+
 
   // counter para el pagination
 
@@ -432,144 +444,149 @@ function loadfollowing() {
   // busca la data
 
   fetch(`/loadfollowing?start=${start}&end=${end}`)
-  .then(response => response.json())
-  .then(data => {
-    console.log(data)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data)
 
-    // pagination
+      // pagination
 
-    totalposts = data.totalposts;
-    pages = Math.ceil(totalposts/quantity)
-    document.querySelector('#pages').style.display = 'inline-block';
-    document.querySelector('#pages').innerHTML = '';
-    // previous button
-    const previousbutton = document.createElement('button');
-    previousbutton.innerHTML = "Previous";
-    previousbutton.className = "btn btn-primary btn-sm mx-1";
-    previousbutton.addEventListener('click', () => {
-    counter = counter - quantity*2;
-    loadfollowing()})
-    document.querySelector('#pages').append(previousbutton);
-    // page buttons
-    for (let i=1; i<pages+1; i++) {
-      const pagebutton = document.createElement('button');
-      pagebutton.innerHTML = `${i}`;
-      pagebutton.className = "btn btn-primary btn-sm mx-1";
-      pagebutton.addEventListener('click', () => {
-        counter = (i*quantity) - 10;
+      totalposts = data.totalposts;
+      pages = Math.ceil(totalposts / quantity)
+      document.querySelector('#pages').style.display = 'inline-block';
+      document.querySelector('#pages').innerHTML = '';
+      // previous button
+      const previousbutton = document.createElement('button');
+      previousbutton.innerHTML = "Previous";
+      previousbutton.className = "btn btn-primary btn-sm mx-1";
+      previousbutton.addEventListener('click', () => {
+        counter = counter - quantity * 2;
         loadfollowing()
       })
-      document.querySelector('#pages').append(pagebutton);
-    }
-    // next button
-    const nextbutton = document.createElement('button');
-    nextbutton.innerHTML = "Next";
-    nextbutton.className = "btn btn-primary btn-sm mx-1";
-    nextbutton.addEventListener('click', () => {
-      loadfollowing()})
-    document.querySelector('#pages').append(nextbutton);
-
-
-    // carga los posts
-
-    for (let post of data.posts) {
-
-      const creator = post.creator;
-      const post_id = post.id;
-      const body = post.body;
-      const time = post.timestamp;
-      const likes = post.likes;
-      const postliked = data.likedposts;
-      
-      //para revisar si el usuario ya likeo el post
-
-      if (postliked.find(i => (i === post_id))) {
-        var liked = true;
-        }
-      else {
-        var liked = false;
+      document.querySelector('#pages').append(previousbutton);
+      // page buttons
+      for (let i = 1; i < pages + 1; i++) {
+        const pagebutton = document.createElement('button');
+        pagebutton.innerHTML = `${i}`;
+        pagebutton.className = "btn btn-primary btn-sm mx-1";
+        pagebutton.addEventListener('click', () => {
+          counter = (i * quantity) - 10;
+          loadfollowing()
+        })
+        document.querySelector('#pages').append(pagebutton);
       }
+      // next button
+      const nextbutton = document.createElement('button');
+      nextbutton.innerHTML = "Next";
+      nextbutton.className = "btn btn-primary btn-sm mx-1";
+      nextbutton.addEventListener('click', () => {
+        loadfollowing()
+      })
+      document.querySelector('#pages').append(nextbutton);
 
-      
-      // crea la base del post
 
-      const divpost = document.createElement('div');
-      const divrow = document.createElement('div');
-      const postitem = document.createElement('div');
-      postitem.name = "itempost";
-      divpost.className = "container-fluid mx-auto my-2 p-2"
-      divrow.className = "row align-items-start" 
-      postitem.className = "col-10"//"col-md-auto mx-0"
-      divpost.style.border = "1px solid rgb(230, 224, 224)"
-      
+      // carga los posts
 
-      // boton de like
+      for (let post of data.posts) {
 
-      const likebutton = document.createElement('button');
+        const creator = post.creator;
+        const post_id = post.id;
+        const body = post.body;
+        const time = post.timestamp;
+        const likes = post.likes;
+        const postliked = data.likedposts;
 
-      likebutton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+        //para revisar si el usuario ya likeo el post
+
+        if (postliked.find(i => (i === post_id))) {
+          var liked = true;
+        }
+        else {
+          var liked = false;
+        }
+
+
+        // crea la base del post
+
+        const divpost = document.createElement('div');
+        const divrow = document.createElement('div');
+        const postitem = document.createElement('div');
+        postitem.name = "itempost";
+        divpost.className = "container-fluid mx-auto my-2 p-2"
+        divrow.className = "row align-items-start"
+        postitem.className = "divtext"//"col-md-auto mx-0"
+        divpost.style.border = "1px solid rgb(230, 224, 224)"
+
+
+        // boton de like
+
+        const likebutton = document.createElement('button');
+
+        likebutton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
       <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
       </svg>`;
 
-      likebutton.className = "col-1 m-0 p-1 btn btn-danger" // "col-1 ms-2 mb-2 btn btn-danger"
-      likebutton.style.borderColor = "white";
-      likebutton.style.backgroundColor = "white";
-      if (liked == true){
-        likebutton.style.color = "red";
-      }
-      else {likebutton.style.color = "grey";}
-      
-      // contador de likes
+        likebutton.className = "col-1 m-0 p-1 btn btn-danger" // "col-1 ms-2 mb-2 btn btn-danger"
+        likebutton.style.borderColor = "white";
+        likebutton.style.backgroundColor = "white";
+        if (liked == true) {
+          likebutton.style.color = "red";
+        }
+        else { likebutton.style.color = "grey"; }
 
-      // likerow.className = "col-md-auto mx-0" // likerow.className = "row align-items-center"
-      const likenum = document.createElement('div');
-      likenum.innerHTML = `<h6>${likes}</h6>`;
-      likenum.className = "col-1 mt-2 mx-0"
+        // contador de likes
+
+        // likerow.className = "col-md-auto mx-0" // likerow.className = "row align-items-center"
+        const likenum = document.createElement('div');
+        likenum.innerHTML = `<h6>${likes}</h6>`;
+        likenum.className = "col-1 mt-2 mx-0"
 
 
-      // crea el contenido del post
+        // crea el contenido del post
 
-      postitem.innerHTML = `<h5><a href="#" style="color:black; text-decoration: none;">@<strong>${creator}</strong></a> <small class="fs-6 opacity-50">${time}</small></h5> 
-      <p class="lead">${body}</p>`;  
+        postitem.innerHTML = `<h5><a href="#" style="color:black; text-decoration: none;">@<strong>${creator}</strong></a> <small class="fs-6 opacity-50">${time}</small></h5> 
+      <p class="lead">${body}</p>`;
 
-      // accion del boton like
+        // accion del boton like
 
-      likebutton.addEventListener('click', () => {
-        if (document.querySelector('#nametitle') === null){
-          alert("you need to log in to like! it's instant, no time wasting.\nFor testing you can log in with \nusername: testing \npass: testing");}
-        else(
+        likebutton.addEventListener('click', () => {
+          if (document.querySelector('#nametitle') === null) {
+            alert("you need to log in to like! it's instant, no time wasting.\nFor testing you can log in with \nusername: testing \npass: testing");
+          }
+          else (
             fetch('/like', {
               method: 'PUT',
               body: JSON.stringify({
                 post_id: post_id,
               })
             })
-            .then(() => {
-              counter=0;
-              loadposts()})
+              .then(() => {
+                counter = 0;
+                loadposts()
+              })
           )
-          
-      })
 
-      // appenda los items y el post
+        })
 
-      divrow.append(postitem);
-      divrow.append(likebutton);
-      divrow.append(likenum);
-      divpost.append(divrow);
-      document.querySelector('#userview').append(divpost);
+        // appenda los items y el post
 
-      // accion del click post user
+        divrow.append(postitem);
+        divrow.append(likebutton);
+        divrow.append(likenum);
+        divpost.append(divrow);
+        document.querySelector('#userview').append(divpost);
 
-      postitem.addEventListener('click', () =>{
-      counter = 0;   
-      loaduser(`${creator}`)});
-      
-    }
-  })
+        // accion del click post user
+
+        postitem.addEventListener('click', () => {
+          counter = 0;
+          loaduser(`${creator}`)
+        });
+
+      }
+    })
 
 
-  
-      
-  
+
+
+
 }

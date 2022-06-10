@@ -4,41 +4,39 @@
 
 {% block body %}
 
-    {% block script %}
-    <script src="{% static 'network/allposts.js' %}"></script>
-    <script src="{% static 'network/functions.js' %}"></script>
+{% block script %}
+<script src="{% static 'network/allposts.js' %}"></script>
+<script src="{% static 'network/functions.js' %}"></script>
 
-    {% endblock %}
-
-
-    <div id="newpostview">
-        {% if user.is_authenticated %}
-        <div id="newpost" class="container border col-11 my-2">
-        <h3>New Post</h3>
-        <form id="postform" >
-            <textarea class="form-control" style="margin: 10px;" id="bodyform"></textarea>
-            <input type="submit" class="btn btn-primary" style="margin: 10px" value="Post"/>
-        </form>
-        </div>
-        {% endif %}
-    </div>
-
-    <div id="postsview">
-    </div>
-
-    <div id="userview"> User View
-    </div>
-
-    <div id="pagination">
-        <div class="container">
-            <div class="row justify-content-md-center" >
-                <div class="col-md-auto mx-0" id="pages"></div>
-            </div> 
-        </div>
-    </div>
-
- 
-    
 {% endblock %}
 
 
+<div id="newpostview">
+    {% if user.is_authenticated %}
+    <div id="newpost" class="container border col-11 my-2">
+        <h3 class="newposttitle">New Post</h3>
+        <form id="postform">
+            <textarea class="form-control" style="margin: 10px;" id="bodyform"></textarea>
+            <input type="submit" class="btn btn-primary" style="margin: 10px" value="Post" />
+        </form>
+    </div>
+    {% endif %}
+</div>
+
+<div id="postsview">
+</div>
+
+<div id="userview"> User View
+</div>
+
+<div id="pagination">
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col-md-auto mx-0" id="pages"></div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
