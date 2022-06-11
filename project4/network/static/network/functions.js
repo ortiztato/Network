@@ -41,7 +41,7 @@ function loadposts() {
       // previous button
       const previousbutton = document.createElement('button');
       previousbutton.innerHTML = "Previous";
-      previousbutton.className = "btn btn-primary btn-sm mx-1";
+      previousbutton.className = "paginationbutton";
       previousbutton.addEventListener('click', () => {
         counter = counter - quantity * 2;
         loadposts()
@@ -51,7 +51,7 @@ function loadposts() {
       for (let i = 1; i < pages + 1; i++) {
         const pagebutton = document.createElement('button');
         pagebutton.innerHTML = `${i}`;
-        pagebutton.className = "btn btn-primary btn-sm mx-1";
+        pagebutton.className = "paginationbutton";
         pagebutton.addEventListener('click', () => {
           counter = (i * quantity) - 10;
           loadposts()
@@ -62,7 +62,7 @@ function loadposts() {
       // next button
       const nextbutton = document.createElement('button');
       nextbutton.innerHTML = "Next";
-      nextbutton.className = "btn btn-primary btn-sm mx-1";
+      nextbutton.className = "paginationbutton";
       nextbutton.addEventListener('click', () => {
         loadposts()
       })
@@ -97,8 +97,8 @@ function loadposts() {
         postitem.name = "itempost";
         divpost.className = "divpost"
         divrow.className = "divrow"
-        postitem.className = "divtext"//"col-md-auto mx-0"
-        divpost.style.border = "1px solid rgb(230, 224, 224)"
+        postitem.className = "divtext"
+
 
 
         // boton de like
@@ -109,9 +109,8 @@ function loadposts() {
       <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
       </svg>`;
 
-        likebutton.className = "col-1 m-0 p-1 btn btn-danger" // "col-1 ms-2 mb-2 btn btn-danger"
-        likebutton.style.borderColor = "white";
-        likebutton.style.backgroundColor = "white";
+        likebutton.className = "likebutton"
+
         if (liked == true) {
           likebutton.style.color = "red";
         }
@@ -122,12 +121,12 @@ function loadposts() {
         // likerow.className = "col-md-auto mx-0" // likerow.className = "row align-items-center"
         const likenum = document.createElement('div');
         likenum.innerHTML = `<h6>${likes}</h6>`;
-        likenum.className = "col-1 mt-2 mx-0"
+        likenum.className = "likestext"
 
         // crea el contenido del post
 
-        postitem.innerHTML = `<h5><a href="#" style="color:black; text-decoration: none;">@<strong>${creator}</strong></a> <small class="fs-6 opacity-50">${time}</small></h5> 
-      <p class="lead">${body}</p>`;
+        postitem.innerHTML = `<span><a href="#" class="creatortext">@${creator}</a></span> <span class="timetext">${time}</span> 
+      <p class="bodytext">${body}</p>`;
 
 
         // accion del boton like
@@ -224,7 +223,7 @@ function loaduser(creator) {
       // previous button
       const previousbutton = document.createElement('button');
       previousbutton.innerHTML = "Previous";
-      previousbutton.className = "btn btn-primary btn-sm mx-1";
+      previousbutton.className = "paginationbutton";
       previousbutton.addEventListener('click', () => {
         counter = counter - quantity * 2;
         loaduser(creator)
@@ -234,7 +233,7 @@ function loaduser(creator) {
       for (let i = 1; i < pages + 1; i++) {
         const pagebutton = document.createElement('button');
         pagebutton.innerHTML = `${i}`;
-        pagebutton.className = "btn btn-primary btn-sm mx-1";
+        pagebutton.className = "paginationbutton";
         pagebutton.addEventListener('click', () => {
           counter = (i * quantity) - 10;
           loaduser(creator)
@@ -244,7 +243,7 @@ function loaduser(creator) {
       // next button
       const nextbutton = document.createElement('button');
       nextbutton.innerHTML = "Next";
-      nextbutton.className = "btn btn-primary btn-sm mx-1";
+      nextbutton.className = "paginationbutton";
       nextbutton.addEventListener('click', () => {
         loaduser(creator)
       })
@@ -302,13 +301,13 @@ function loaduser(creator) {
         const divrow = document.createElement('div');
         const postitem = document.createElement('div');
         postitem.name = "itempost";
-        divpost.className = "container-fluid mx-auto my-2 p-2"
-        divrow.className = "row align-items-start"
-        postitem.className = "divtext"//"col-md-auto mx-0"
-        divpost.style.border = "1px solid rgb(230, 224, 224)"
+        divpost.className = "divpost"
+        divrow.className = "divrow"
+        postitem.className = "divtext"
 
-        postitem.innerHTML = `<h5><a href="#" style="color:black; text-decoration: none;">@<strong>${creator}</strong></a> <small class="fs-6 opacity-50">${time}</small></h5> 
-        <p class="lead">${body}</p>`;
+
+        postitem.innerHTML = `<span><a href="#" class="creatortext">@${creator}</a></span> <span class="timetext">${time}</span> 
+      <p class="bodytext">${body}</p>`;
 
         // para revisar si el usuario ya likeo el post
 
@@ -327,9 +326,8 @@ function loaduser(creator) {
         <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
         </svg>`;
 
-        likebutton.className = "col-1 m-0 p-1 btn btn-danger" // "col-1 ms-2 mb-2 btn btn-danger"
-        likebutton.style.borderColor = "white";
-        likebutton.style.backgroundColor = "white";
+        likebutton.className = "likebutton"
+
         if (liked == true) {
           likebutton.style.color = "red";
         }
@@ -337,10 +335,10 @@ function loaduser(creator) {
 
         // contador de likes
 
-        // likerow.className = "col-md-auto mx-0" // likerow.className = "row align-items-center"
+
         const likenum = document.createElement('div');
         likenum.innerHTML = `<h6>${likes}</h6>`;
-        likenum.className = "col-1 mt-2 mx-0"
+        likenum.className = "likestext"
 
 
         // appenda los items y el post
@@ -457,7 +455,7 @@ function loadfollowing() {
       // previous button
       const previousbutton = document.createElement('button');
       previousbutton.innerHTML = "Previous";
-      previousbutton.className = "btn btn-primary btn-sm mx-1";
+      previousbutton.className = "paginationbutton";
       previousbutton.addEventListener('click', () => {
         counter = counter - quantity * 2;
         loadfollowing()
@@ -467,7 +465,7 @@ function loadfollowing() {
       for (let i = 1; i < pages + 1; i++) {
         const pagebutton = document.createElement('button');
         pagebutton.innerHTML = `${i}`;
-        pagebutton.className = "btn btn-primary btn-sm mx-1";
+        pagebutton.className = "paginationbutton";
         pagebutton.addEventListener('click', () => {
           counter = (i * quantity) - 10;
           loadfollowing()
@@ -477,7 +475,7 @@ function loadfollowing() {
       // next button
       const nextbutton = document.createElement('button');
       nextbutton.innerHTML = "Next";
-      nextbutton.className = "btn btn-primary btn-sm mx-1";
+      nextbutton.className = "paginationbutton";
       nextbutton.addEventListener('click', () => {
         loadfollowing()
       })
@@ -505,16 +503,15 @@ function loadfollowing() {
         }
 
 
-        // crea la base del post
+        // crea la base del post        
 
         const divpost = document.createElement('div');
         const divrow = document.createElement('div');
         const postitem = document.createElement('div');
         postitem.name = "itempost";
-        divpost.className = "container-fluid mx-auto my-2 p-2"
-        divrow.className = "row align-items-start"
-        postitem.className = "divtext"//"col-md-auto mx-0"
-        divpost.style.border = "1px solid rgb(230, 224, 224)"
+        divpost.className = "divpost"
+        divrow.className = "divrow"
+        postitem.className = "divtext"
 
 
         // boton de like
@@ -525,9 +522,8 @@ function loadfollowing() {
       <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
       </svg>`;
 
-        likebutton.className = "col-1 m-0 p-1 btn btn-danger" // "col-1 ms-2 mb-2 btn btn-danger"
-        likebutton.style.borderColor = "white";
-        likebutton.style.backgroundColor = "white";
+        likebutton.className = "likebutton";
+
         if (liked == true) {
           likebutton.style.color = "red";
         }
@@ -535,16 +531,16 @@ function loadfollowing() {
 
         // contador de likes
 
-        // likerow.className = "col-md-auto mx-0" // likerow.className = "row align-items-center"
+
         const likenum = document.createElement('div');
         likenum.innerHTML = `<h6>${likes}</h6>`;
-        likenum.className = "col-1 mt-2 mx-0"
+        likenum.className = "likestext"
 
 
         // crea el contenido del post
 
-        postitem.innerHTML = `<h5><a href="#" style="color:black; text-decoration: none;">@<strong>${creator}</strong></a> <small class="fs-6 opacity-50">${time}</small></h5> 
-      <p class="lead">${body}</p>`;
+        postitem.innerHTML = `<span><a href="#" class="creatortext">@${creator}</a></span> <span class="timetext">${time}</span> 
+      <p class="bodytext">${body}</p>`;
 
         // accion del boton like
 
