@@ -130,7 +130,10 @@
   }
 
   .open-menu:focus:not(:focus-visible),
-  esto es para que no quede seleccionado el boton .close-menu:focus:not(:focus-visible) {
+
+  /* esto es para que no quede seleccionador el boton */
+
+  .close-menu:focus:not(:focus-visible) {
     outline: none;
   }
 

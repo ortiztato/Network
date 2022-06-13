@@ -2,30 +2,34 @@
 
 {% block body %}
 
+<section class="registersection">
     <h2>Register</h2>
 
     {% if message %}
-        <div>{{ message }}</div>
+    <div>{{ message }}</div>
     {% endif %}
 
     <form action="{% url 'register' %}" method="post">
         {% csrf_token %}
-        <div class="form-group">
-            <input class="form-control" autofocus type="text" name="username" placeholder="Username">
+        <div>
+            <input autofocus type="text" name="username" placeholder="Username">
         </div>
-        <div class="form-group">
-            <input class="form-control" type="email" name="email" placeholder="Email Address">
+        <div>
+            <input class="inputemail" type="email" name="email" placeholder="Email Address">
         </div>
-        <div class="form-group">
-            <input class="form-control" type="password" name="password" placeholder="Password">
+        <div>
+            <input type="password" name="password" placeholder="Password">
         </div>
-        <div class="form-group">
-            <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
+        <div>
+            <input type="password" name="confirmation" placeholder="Confirm Password">
         </div>
-        <input class="btn btn-primary" type="submit" value="Register">
+        <input class="loginsubmit" id="registerbutton" type="submit" value="Register">
     </form>
 
     Already have an account? <a href="{% url 'login' %}">Log In here.</a>
 
-{% endblock %}
+</section>
 
+
+
+{% endblock %}
