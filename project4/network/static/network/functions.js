@@ -256,11 +256,11 @@ function loaduser(creator) {
         const follow = document.createElement('button');
         if (followdata) {
           follow.innerHTML = "Unfollow";
-          follow.className = "btn ms-3 mb-2 btn-danger";
+          follow.className = "unfollowbutton";
         }
         else {
           follow.innerHTML = "Follow";
-          follow.className = "btn ms-3 mb-2 btn-success";
+          follow.className = "followbutton";
         }
         //follow.style.marginLeft = "20px";
         document.querySelector('#userview').append(follow);

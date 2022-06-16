@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 import json
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -127,7 +126,7 @@ def loaduserposts(request, creator):
         else: 
             followdata = True
     else: 
-        requestuser = NULL
+        requestuser = 0
         followdata = False
 
     posts = Post.objects.all().filter(creator = usercreator)
