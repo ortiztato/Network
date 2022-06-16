@@ -1,8 +1,17 @@
+.maincontainer {
+    margin: 0;
+    padding: 0;
+    min-height: 90vh;
+}
+
 #bodysection {
     max-width: 800px;
     margin: auto;
-    margin-bottom: 90px;
+    margin-bottom: 10px;
+    padding-top: 85px;
 }
+
+
 
 /* ALL POSTS mobile */
 
@@ -218,9 +227,9 @@
 
 footer {
     background-color: rgb(230, 230, 230);
-    position: fixed;
     bottom: 0;
     width: 100%;
+
 }
 
 footer p {
@@ -231,7 +240,8 @@ footer p {
 }
 
 footer .container {
-    height: 70px;
+    height: 10vh;
+    /*  height: 70px; */
     display: flex;
     justify-content: center;
     align-items: center;
