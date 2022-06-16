@@ -55,6 +55,11 @@
     padding-right: 20px;
 }
 
+#userview {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
 .divpost {
     display: flex;
     flex-direction: column;

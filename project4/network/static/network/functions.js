@@ -557,7 +557,7 @@ function loadfollowing() {
             })
               .then(() => {
                 counter = 0;
-                loadposts()
+                loadfollowing()
               })
           )
 
