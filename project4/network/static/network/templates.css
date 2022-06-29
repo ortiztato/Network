@@ -1,7 +1,7 @@
 .maincontainer {
     margin: 0;
     padding: 0;
-    min-height: 90vh;
+    /* min-height: 90vh; */
 }
 
 #bodysection {
@@ -227,7 +227,7 @@
 
 footer {
     background-color: rgb(230, 230, 230);
-    bottom: 0;
+    margin-top: auto;
     width: 100%;
 
 }
@@ -240,6 +240,7 @@ footer p {
 }
 
 footer .container {
+    /* para que funcione bien tiene que estar todo el resto del body en un div sin margen ni padding que tenga min heigh 90vh y la height del footer sea 10vh, si tenes header, la seccion que venga dsp tiene que tener un PADDING mayor que la altura del header */
     height: 10vh;
     /*  height: 70px; */
     display: flex;

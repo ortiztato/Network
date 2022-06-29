@@ -1,9 +1,11 @@
 var counter = 0
 var quantity = 10;
 
-document.addEventListener('DOMContentLoaded', function() {
-  
+document.addEventListener('DOMContentLoaded', function () {
+
   loadposts();
+  /* const section = this.dataset.section
+  history.pushState({ section: section }, "", `loadposts`); */
 
   // acciones del encabezado
 
@@ -23,13 +25,19 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('#newpostview').style.display = 'block';
     counter = 0;
     loadfollowing();
+    /* const section = this.dataset.section
+    history.pushState({ section: section }, "", `loadfollowing`); */
+
   })
 
   document.querySelector('#nametitle').addEventListener('click', () => {
     document.querySelector('#newpostview').style.display = 'block';
     nametitle = document.querySelector('#nametitle').innerText;
+    nametitle = nametitle.toLowerCase()
     counter = 0;
     loaduser(nametitle);
+    /* const section = this.dataset.section
+    history.pushState({ section: section }, "", `loaduser`); */
   })
 
 
@@ -43,13 +51,13 @@ document.addEventListener('DOMContentLoaded', function() {
         body: document.querySelector('#bodyform').value
       })
     })
-    .then(response => response.json())
-    .then(() => {
-      counter = 0;
-      loadposts();
-      document.querySelector('#bodyform').value = "";
-      //console.log(result);
-    });
+      .then(response => response.json())
+      .then(() => {
+        counter = 0;
+        loadposts();
+        document.querySelector('#bodyform').value = "";
+        //console.log(result);
+      });
     return false;
   }
 })
